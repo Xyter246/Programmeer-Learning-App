@@ -10,7 +10,6 @@ public class CommandWindow : Label
 {
     public CommandWindow(GameWindow gameWindow)
     {
-        gameWindow.Resize += OnResize;
         this.AutoSize = false;
         this.BackColor = Color.Blue;
     }

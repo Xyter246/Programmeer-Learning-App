@@ -35,11 +35,12 @@ public class GameWindow : Form
         this.Controls.Add(_cmdWindow);
         #endregion
 
-        //this.Resize?.invoke(this, EventArgs.Empty);
+        this.OnResize(null, null);
     }
 
     private void OnResize(object? o, EventArgs? ea)
     {
         this.UIScalingFactor = this.Size.Width / (double)this.Size.Height;
+        this._cmdWindow.OnResize(this, ea);
     }
 }

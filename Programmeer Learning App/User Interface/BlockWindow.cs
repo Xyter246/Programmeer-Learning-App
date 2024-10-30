@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace Programmeer_Learning_App.User_Interface;
 internal class BlockWindow : Panel
 {
-    private readonly Label label;
+    private readonly Label _label = new Label();
 }
