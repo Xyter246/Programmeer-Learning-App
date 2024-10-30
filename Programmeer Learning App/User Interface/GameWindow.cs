@@ -44,17 +44,15 @@ public class GameWindow : Form
         #endregion
 
         #region CommandWindow
-        _cmdWindow = new CommandWindow(this);
+        _cmdWindow = new CommandWindow();
         _cmdWindow.Location = new Point(0, UsableStartLocation);
         this.Controls.Add(_cmdWindow);
         #endregion
 
         #region BlockWindow
-        _blockWindow = new BlockWindow(this);
+        _blockWindow = new BlockWindow();
         this.Controls.Add(_blockWindow);
         #endregion
-
-        
 
         this.OnResize(null, null);
     }
