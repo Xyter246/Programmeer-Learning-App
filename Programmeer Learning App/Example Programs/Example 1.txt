@@ -1,0 +1,4 @@
+RepeatCommand 4 [
+	MoveCommand 3
+	TurnCommand Right
+]

@@ -30,7 +30,7 @@ public class GameWindow : Form
         #endregion
 
         #region CommandWindow
-        _cmdWindow = new CommandWindow(this);
+        _cmdWindow = new CommandWindow();
         _cmdWindow.Location = new Point(0, 0);
         this.Controls.Add(_cmdWindow);
         #endregion

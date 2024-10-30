@@ -8,7 +8,7 @@ namespace Programmeer_Learning_App.User_Interface;
 
 public class CommandWindow : Label
 {
-    public CommandWindow(GameWindow gameWindow)
+    public CommandWindow()
     {
         this.AutoSize = false;
         this.BackColor = Color.Blue;
