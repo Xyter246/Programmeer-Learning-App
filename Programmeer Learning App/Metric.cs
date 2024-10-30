@@ -17,9 +17,8 @@ public static class Metric
         {
             foreach (Command cmd in commands) {
                 count++;
-                if (cmd is RepeatCommand rptcmd) {
+                if (cmd is RepeatCommand rptcmd)
                     count = RecursiveRepeat(rptcmd.Commands, count);
-                }
             }
             return count;
         }
@@ -33,10 +32,8 @@ public static class Metric
         {
             int maxDepth = currentDepth;
             foreach (Command cmd in commands)
-                if (cmd is RepeatCommand rptcmd) {
-                    maxDepth = Math.Max(maxDepth, RecursiveRepeat(rptcmd.Commands, currentDepth + 1));
-                }
-            
+                if (cmd is RepeatCommand rptcmd)
+                    maxDepth = Math.Max(maxDepth, RecursiveRepeat(rptcmd.Commands, currentDepth + 1));            
             return maxDepth;
         }
     }

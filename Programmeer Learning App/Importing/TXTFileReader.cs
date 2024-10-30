@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Programmeer_Learning_App.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,26 @@ namespace Programmeer_Learning_App.Importing;
 
 public class TXTFileReader : IFileReader
 {
-    public Program Readfile(string filename)
+    public Program Readfile(string filepath)
     {
         Program program = new Program();
-        StreamReader sr = new StreamReader(filename);
-        string? line = sr.ReadLine();
-
-        while (line != null) {
-            // READ LINE and convert to Command
+        StreamReader sr = new StreamReader(filepath);
+        
+        for (string? line = sr.ReadLine(); 
+             line != null; 
+             line = sr.ReadLine()) 
+        {
+            string[] words = line.Split(' ');
+            program.Add(ConvertCommand(words));
         }
 
         return program;
+    }
+
+    private Command ConvertCommand(string[] words)
+    {
+        Command command = null!;
+
+        return command!;
     }
 }
