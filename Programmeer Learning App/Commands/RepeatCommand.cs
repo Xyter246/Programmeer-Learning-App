@@ -23,7 +23,8 @@ public class RepeatCommand : Command
     {
         for (int i = 0; i < _repeatCount; i++)
             ExecuteCycle(player);
-        
+        return;
+
         void ExecuteCycle(Player player)
         {
             foreach (Command command in Commands)
@@ -36,11 +37,11 @@ public class RepeatCommand : Command
 
     public override string ToString()
     {
-        string rtnString = $"RepeatCommand {_repeatCount} [ ";
+        string rtnString = $"RepeatCommand {_repeatCount} [ \n";
 
         foreach (Command cmd in this.Commands)
-            rtnString += cmd.ToString() + ", ";
+            rtnString += cmd + "\n";
 
-        return rtnString + " ]";
+        return rtnString + " ] \n";
     }
 }

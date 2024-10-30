@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows7.0</TargetFramework>
-    <RootNamespace>Programmer_Learning_App_Unit_Tests</RootNamespace>
+    <RootNamespace>Programmeer_Learning_App_Unit_Tests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 

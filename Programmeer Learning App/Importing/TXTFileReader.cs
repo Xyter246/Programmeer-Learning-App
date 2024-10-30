@@ -21,7 +21,7 @@ public class TXTFileReader : IFileReader
             string[] words = line.Split(' ');
             program.Add(ConvertCommand(words));
         }
-
+        sr.Close();
         return program;
     }
 
