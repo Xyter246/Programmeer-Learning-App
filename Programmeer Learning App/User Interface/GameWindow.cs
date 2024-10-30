@@ -19,6 +19,13 @@ public class GameWindow : Form
     }
 
     private readonly CommandWindow _cmdWindow;
+    private readonly BlockWindow _blockWindow;
+    private readonly TopBar _topBar;
+    private RunWindow? runWindow;
+    private bool running = false;
+
+    public int UsableHeight;
+    public int UsableStartLocation;
     public double UIScalingFactor;
 
     public GameWindow()
@@ -29,18 +36,42 @@ public class GameWindow : Form
         this.Resize += OnResize;
         #endregion
 
+        #region TopBar
+        _topBar = new TopBar(this);
+        this.Controls.Add(_topBar);
+        this.UsableHeight = ClientSize.Height - _topBar.Height;
+        this.UsableStartLocation = _topBar.Height;
+        #endregion
+
         #region CommandWindow
         _cmdWindow = new CommandWindow(this);
-        _cmdWindow.Location = new Point(0, 0);
+        _cmdWindow.Location = new Point(0, UsableStartLocation);
         this.Controls.Add(_cmdWindow);
         #endregion
+
+        #region BlockWindow
+        _blockWindow = new BlockWindow(this);
+        this.Controls.Add(_blockWindow);
+        #endregion
+
+        
 
         this.OnResize(null, null);
     }
 
     private void OnResize(object? o, EventArgs? ea)
     {
+        this.UsableHeight = ClientSize.Height - _topBar.Height;
         this.UIScalingFactor = this.Size.Width / (double)this.Size.Height;
         this._cmdWindow.OnResize(this, ea);
+        this._blockWindow.OnResize(this, ea, _cmdWindow.Width);
+        this.runWindow?.OnResize(this, ea);
+    }
+
+    public void runButton_Click(object? o, EventArgs ea)
+    {
+        runWindow = new RunWindow(new Size(4, 4));
+        this.Controls.Add(runWindow);
+        this.OnResize(null, null);
     }
 }

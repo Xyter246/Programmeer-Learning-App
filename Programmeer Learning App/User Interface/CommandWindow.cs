@@ -17,6 +17,6 @@ public class CommandWindow : Label
     public void OnResize(object? o, EventArgs? ea)
     {
         if (o is GameWindow gamewindow)
-            this.Size = new Size(gamewindow.Size.Width / 4, gamewindow.Size.Height);
+            this.Size = new Size(gamewindow.Size.Width / 4, gamewindow.UsableHeight);
     }
 }
