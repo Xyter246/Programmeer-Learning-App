@@ -9,7 +9,7 @@ internal class BlockWindow : Panel
 {
     private readonly Label _label = new Label();
 
-    public BlockWindow(GameWindow gameWindow)
+    public BlockWindow()
     {
         this.AutoSize = false;
         this.BackColor = Color.Pink;
