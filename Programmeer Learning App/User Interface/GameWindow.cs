@@ -68,8 +68,20 @@ public class GameWindow : Form
 
     public void runButton_Click(object? o, EventArgs ea)
     {
-        runWindow = new RunWindow(new Size(4, 4));
-        this.Controls.Add(runWindow);
+
+        if (!this.running) {
+            runWindow = new RunWindow(new Size(4, 4));
+            this.Controls.Add(runWindow);
+        }
+
+        else {
+            this.Controls.Remove(runWindow);
+            runWindow.Dispose();
+            runWindow = null;
+        }
+
         this.OnResize(null, null);
+
+        this.running = !this.running;
     }
 }
