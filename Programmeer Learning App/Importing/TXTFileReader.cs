@@ -14,7 +14,9 @@ public class TXTFileReader : IFileReader
     {
         OpenFileDialog ofd = new OpenFileDialog();
         ofd.Filter = @"Text Documents (*.txt)|*.txt|All files (*.*)|*.*";
-        if (ofd.ShowDialog() != DialogResult.OK) 
+        if (ofd.ShowDialog() != DialogResult.OK || ofd.FileName == string.Empty) 
+            throw new ArgumentException();
+        if (ofd.FileName == null)
             throw new ArgumentNullException();
 
         StreamReader sr = new StreamReader(ofd.FileName);
@@ -22,11 +24,19 @@ public class TXTFileReader : IFileReader
         string? line = sr.ReadLine();
         while (line is not null) {
             string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int indentCount = CalcIndent(ref words);
             commands.Add(ConvertCommand(words));
         }
 
         sr.Close();
         return new Program(commands);
+    }
+
+    private static int CalcIndent(ref string[] words)
+    {
+        string[] tabsStrings = words[0].Split('\t');
+        words[0] = tabsStrings[^1];
+        return tabsStrings.Length - 1;
     }
 
     private static Command ConvertCommand(string[] words) 
