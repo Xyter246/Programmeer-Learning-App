@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Programmeer_Learning_App.Commands;
+using Programmeer_Learning_App.Enums;
 
 namespace Programmeer_Learning_App;
 
@@ -49,5 +50,28 @@ public static class Metric
                     count = RecursiveRepeat(rptcmd.Commands, count + 1);
             return count;
         }
+    }
+
+    /// <summary>
+    /// Calculates the maximally needed BoardSize for a given Program.
+    /// </summary>
+    /// <param name="program">The Program which is being tested.</param>
+    /// <param name="p">The Player instance which is used for this Program.</param>
+    /// <returns>A Point and Size tuple. The Point is the Top-Left corner Point in the Grid, and the Size is the minimal Size of the Grid from that Point.</returns>
+    public static (Point, Size) MaxGridSize(Program program, Player p)
+    {
+        Player player = (Player)p.Clone();
+        int minX = player.Pos.X, maxX = player.Pos.X;
+        int minY = player.Pos.Y, maxY = player.Pos.Y;
+
+        while (!program.HasEnded) {
+            program.StepOnce(player);
+            minX = Math.Min(minX, player.Pos.X);
+            minY = Math.Min(minY, player.Pos.Y);
+            maxX = Math.Max(maxX, player.Pos.X);
+            maxY = Math.Max(maxY, player.Pos.Y);
+        }
+
+        return (new Point(minX, maxY), new Size(maxX - minX, maxY - minY));
     }
 }

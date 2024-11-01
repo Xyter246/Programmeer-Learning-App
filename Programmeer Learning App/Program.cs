@@ -9,34 +9,32 @@ namespace Programmeer_Learning_App;
 
 public class Program
 {
-    public List<Command> Commands = new List<Command>();
-    private Player _player;
+    public List<Command> Commands;
+    private int _currentIndex;
+    public bool HasEnded => _currentIndex >= this.Commands.Count;
 
-    public Program(Player player, List<Command> commands)
+    public Program(List<Command> commands)
     {
         Commands = commands;
-        _player = player;
     }
 
-    public Program(Player player) 
+    public Program() : this (new List<Command>()) { }
+
+    /// <summary>
+    /// Executes one command of the Program on the given player.
+    /// </summary>
+    /// <param name="player">The Player instance which gets updated.</param>
+    public void StepOnce(Player player)
     {
-        _player = player;
+        if (!HasEnded)
+            Commands[_currentIndex++].Execute(player);
     }
 
-    public Program() : this(null!) { }
-
-    public void Execute()
+    public void ResetProgram()
     {
-        if (_player is null)
-            throw new ArgumentNullException();
-
-        foreach (Command command in Commands)
-            command.Execute(_player);
+        _currentIndex = 0;
     }
 
     public void Add(Command command)
         => Commands.Add(command);
-
-    public void Bind(Player player) 
-        => _player = player;
 }

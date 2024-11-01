@@ -11,7 +11,7 @@ public class RepeatCommandUnitTest
     public void RepeatsCommands()
     {
         // Arrange
-        RepeatCommand rptcmd = new(4);
+        RepeatCommand rptcmd = new RepeatCommand(4);
         rptcmd.Add(new TurnCommand(RelativeDir.Right));
         rptcmd.Add(new MoveCommand(3));
 

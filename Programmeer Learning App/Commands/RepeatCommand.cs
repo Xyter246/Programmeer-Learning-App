@@ -37,11 +37,11 @@ public class RepeatCommand : Command
 
     public override string ToString()
     {
-        string rtnString = $"RepeatCommand {_repeatCount} [ \n";
+        string rtnString = $"RepeatCommand {_repeatCount} [\n";
 
         foreach (Command cmd in this.Commands)
             rtnString += cmd + "\n";
 
-        return rtnString + " ] \n";
+        return rtnString + " ]\n";
     }
 }

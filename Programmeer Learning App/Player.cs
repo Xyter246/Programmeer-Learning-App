@@ -4,7 +4,7 @@ using Programmeer_Learning_App.Enums;
 
 namespace Programmeer_Learning_App;
 
-public class Player
+public class Player : ICloneable
 {
     public static Player EmptyPlayer = new Player(CardinalDir.North);
 
@@ -18,4 +18,8 @@ public class Player
     }
 
     public Player(CardinalDir cardDir) : this(Point.Empty, cardDir) { }
+    public object Clone()
+    {
+        return (Player)base.MemberwiseClone();
+    }
 }

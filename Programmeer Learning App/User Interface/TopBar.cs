@@ -10,7 +10,9 @@ namespace Programmeer_Learning_App.User_Interface
 {
     public class TopBar : Label
     {
-        private Button runButton;
+        private readonly Size _bufferSize = new Size(5, 25);
+        private Button _runButton;
+        private Button _exportButton;
 
         public TopBar(GameWindow gameWindow)
         {
@@ -18,16 +20,33 @@ namespace Programmeer_Learning_App.User_Interface
             this.Height = 30;
             this.Dock = DockStyle.Top;
 
-            #region RunButton
-            runButton = new Button();
-            runButton.FlatStyle = FlatStyle.Flat;
-            runButton.BackColor = Color.Gray;
-            runButton.Text = "RUN"; 
-            runButton.Size = new Size(60, 25); 
-            runButton.Location = new Point(5, 2);
-            runButton.Click += gameWindow.runButton_Click;
-            this.Controls.Add(runButton);
-            #endregion
+            MakeRunButton();
+            MakeExportButton();
+            return;
+
+            void MakeRunButton()
+            {
+                _runButton = new Button();
+                _runButton.FlatStyle = FlatStyle.Flat;
+                _runButton.BackColor = Color.Gray;
+                _runButton.Text = @"RUN";
+                _runButton.Size = new Size(60, 25);
+                _runButton.Location = new Point(5, 2);
+                _runButton.Click += gameWindow.runButton_Click;
+                this.Controls.Add(_runButton);
+            }
+
+            void MakeExportButton()
+            {
+                _exportButton = new Button();
+                _exportButton.FlatStyle = FlatStyle.Flat;
+                _exportButton.BackColor = Color.Gray;
+                _exportButton.Text = @"EXPORT";
+                _exportButton.Size = new Size(60, 25);
+                _exportButton.Location = _runButton!.Location with { X = _runButton.Location.X + _runButton.Size.Width + _bufferSize.Width };
+                _exportButton.Click += gameWindow.exportButton_Click;
+                this.Controls.Add(_exportButton);
+            }
         }
     }
 }

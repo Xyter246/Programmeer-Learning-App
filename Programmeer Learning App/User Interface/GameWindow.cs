@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Programmeer_Learning_App.Exporting;
+using Programmeer_Learning_App.Importing;
 
 namespace Programmeer_Learning_App.User_Interface;
 
@@ -21,8 +23,8 @@ public class GameWindow : Form
     private readonly CommandWindow _cmdWindow;
     private readonly BlockWindow _blockWindow;
     private readonly TopBar _topBar;
-    private RunWindow? runWindow;
-    private bool running = false;
+    private RunWindow? _runWindow;
+    private bool _running = false;
 
     public int UsableHeight;
     public int UsableStartLocation;
@@ -63,25 +65,30 @@ public class GameWindow : Form
         this.UIScalingFactor = this.Size.Width / (double)this.Size.Height;
         this._cmdWindow.OnResize(this, ea);
         this._blockWindow.OnResize(this, ea, _cmdWindow.Width);
-        this.runWindow?.OnResize(this, ea);
+        this._runWindow?.OnResize(this, ea);
     }
 
     public void runButton_Click(object? o, EventArgs ea)
     {
 
-        if (!this.running) {
-            runWindow = new RunWindow(new Size(4, 4));
-            this.Controls.Add(runWindow);
+        if (!this._running) {
+            _runWindow = new RunWindow(new Size(4, 4));
+            this.Controls.Add(_runWindow);
         }
 
         else {
-            this.Controls.Remove(runWindow);
-            runWindow.Dispose();
-            runWindow = null;
+            this.Controls.Remove(_runWindow);
+            _runWindow?.Dispose();
+            _runWindow = null;
         }
 
         this.OnResize(null, null);
 
-        this.running = !this.running;
+        this._running = !this._running;
+    }
+
+    public void exportButton_Click(object? o, EventArgs ea)
+    {
+        TXTFileWriter.WriteFile(_blockWindow.Program(null!));
     }
 }

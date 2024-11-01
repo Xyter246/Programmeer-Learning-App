@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace Programmeer_Learning_App.User_Interface;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Programmeer_Learning_App.Commands;
+
+namespace Programmeer_Learning_App.User_Interface;
 
 internal class BlockWindow : Panel
-{   
-    // AI generated code
-
+{
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
-    private readonly LinkedList<Commands.Command> _commandLabels; // Linked list to track command labels
+    private readonly LinkedList<Command> _commandLabels; // Linked list to track command labels
     private Point _labelLocation; // Tracks where to add the next label
 
     public BlockWindow()
@@ -32,12 +31,12 @@ internal class BlockWindow : Panel
         this.Controls.Add(_blockPanel); // Add the inner panel to BlockWindow
 
         // Initialize the linked list for command labels
-        _commandLabels = new LinkedList<Commands.Command>();
+        _commandLabels = new LinkedList<Command>();
         _labelLocation = new Point(10, 10); // Starting position for labels
     }
 
     // Method to add a new command label to the panel
-    public void AddCommand(Commands.Command commandName)
+    public void AddCommand(Command commandName)
     {
         // Create a new label for the command
         throw new NotImplementedException();
@@ -58,10 +57,16 @@ internal class BlockWindow : Panel
     // Resize handler to adjust BlockWindow size and location based on GameWindow
     public void OnResize(object? o, EventArgs? ea, int cmdWindowWidth)
     {
-        if (o is GameWindow gamewindow) {
-            this.Size = new Size(gamewindow.Size.Width / 4, gamewindow.UsableHeight);
-            this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
-        }
+        if (o is not GameWindow gamewindow) return;
+
+        this.Size = new Size(gamewindow.Size.Width / 4, gamewindow.UsableHeight);
+        this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
+    }
+
+    // Create an instance of Program from the Labels in this window
+    public Program Program(Player player)
+    {
+        return new Program(_commandLabels.ToList());
     }
 }
 
