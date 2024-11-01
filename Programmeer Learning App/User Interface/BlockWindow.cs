@@ -5,16 +5,57 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Programmeer_Learning_App.User_Interface;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
 internal class BlockWindow : Panel
-{
-    private readonly Label _label = new Label();
+{   
+    // AI generated code
+
+    private readonly Panel _blockPanel; // Inner panel for scrollable commands
+    private readonly LinkedList<Commands.Command> _commandLabels; // Linked list to track command labels
+    private Point _labelLocation; // Tracks where to add the next label
 
     public BlockWindow()
     {
         this.AutoSize = false;
         this.BackColor = Color.Pink;
+        this.AutoScroll = true;
+
+        // Initialize the inner panel for command labels
+        _blockPanel = new Panel {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Top, // Ensures it grows vertically
+        };
+        this.Controls.Add(_blockPanel); // Add the inner panel to BlockWindow
+
+        // Initialize the linked list for command labels
+        _commandLabels = new LinkedList<Commands.Command>();
+        _labelLocation = new Point(10, 10); // Starting position for labels
     }
 
+    // Method to add a new command label to the panel
+    public void AddCommand(Commands.Command commandName)
+    {
+        // Create a new label for the command
+        throw new NotImplementedException();
+    }
+
+    // Optional: Method to remove a command label by command name
+    public void RemoveCommand(string commandName)
+    {
+        throw new NotImplementedException();
+    }
+
+    // Helper method to re-align labels after a removal
+    private void UpdatePositions()
+    {
+        throw new NotImplementedException();
+    }
+
+    // Resize handler to adjust BlockWindow size and location based on GameWindow
     public void OnResize(object? o, EventArgs? ea, int cmdWindowWidth)
     {
         if (o is GameWindow gamewindow) {
@@ -23,3 +64,4 @@ internal class BlockWindow : Panel
         }
     }
 }
+
