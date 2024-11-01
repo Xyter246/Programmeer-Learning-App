@@ -15,4 +15,6 @@ public abstract class Command
     public abstract void Execute(Player player);
 
     public abstract override string ToString();
+
+    public abstract Command FromString(string[] words);
 }

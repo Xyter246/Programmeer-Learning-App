@@ -8,5 +8,5 @@ namespace Programmeer_Learning_App.Importing;
 
 public interface IFileReader
 {
-    Program Readfile(string filename);
+    static abstract Program Readfile();
 }

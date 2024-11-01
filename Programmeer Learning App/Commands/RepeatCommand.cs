@@ -11,13 +11,13 @@ public class RepeatCommand : Command
     public List<Command> Commands;
     private readonly int _repeatCount;
 
-    public RepeatCommand(int repeatCount, List<Command>? commands = null)
+    public RepeatCommand(int repeatCount, List<Command> commands)
     {
         _repeatCount = repeatCount;
-
-        commands ??= new List<Command>();
         Commands = commands;
     }
+
+    public RepeatCommand(int repeatCount) : this(repeatCount, new List<Command>()) { }
 
     public override void Execute(Player player)
     {
@@ -37,4 +37,7 @@ public class RepeatCommand : Command
 
     public override string ToString() 
         => $"RepeatCommand {_repeatCount}";
+
+    public override Command FromString(string[] words)
+        => new RepeatCommand(int.Parse(words[1]));
 }

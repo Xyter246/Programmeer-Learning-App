@@ -10,8 +10,8 @@ namespace Programmeer_Learning_App;
 public class Program
 {
     public List<Command> Commands;
-    private int _currentIndex;
     public bool HasEnded => _currentIndex >= this.Commands.Count;
+    private int _currentIndex;
 
     public Program(List<Command> commands)
     {
@@ -30,6 +30,10 @@ public class Program
             Commands[_currentIndex++].Execute(player);
     }
 
+    /// <summary>
+    /// Resets the Program back to the start.
+    /// Doesn't take into account any changes to Player instances.
+    /// </summary>
     public void ResetProgram()
     {
         _currentIndex = 0;

@@ -63,8 +63,10 @@ internal class BlockWindow : Panel
         this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
     }
 
-    // Create an instance of Program from the Labels in this window
+    /// <summary>
+    /// Converts the Command Labels of the BlockWindow to a useable Program instance.
+    /// </summary>
+    /// <returns>A new Program instance with the current Label Commands.</returns>
     public Program Program() 
         => new Program(_commandLabels.ToList());
 }
-

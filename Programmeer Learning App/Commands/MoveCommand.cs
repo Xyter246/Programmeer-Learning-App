@@ -27,4 +27,7 @@ public class MoveCommand : Command
 
     public override string ToString()
         => $"MoveCommand {MoveAmount}";
+
+    public override Command FromString(string[] words) 
+        => new MoveCommand(int.Parse(words[1]));
 }

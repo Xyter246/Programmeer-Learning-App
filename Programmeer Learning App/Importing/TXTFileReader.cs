@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,26 +10,25 @@ namespace Programmeer_Learning_App.Importing;
 
 public class TXTFileReader : IFileReader
 {
-    public Program Readfile(string filepath)
+    public static Program Readfile()
     {
-        Program program = new Program();
-        StreamReader sr = new StreamReader(filepath);
-        
-        for (string? line = sr.ReadLine(); 
-             line != null; 
-             line = sr.ReadLine()) 
-        {
-            string[] words = line.Split(' ');
-            program.Add(ConvertCommand(words));
+        OpenFileDialog ofd = new OpenFileDialog();
+        ofd.Filter = @"Text Documents (*.txt)|*.txt|All files (*.*)|*.*";
+        if (ofd.ShowDialog() != DialogResult.OK) 
+            throw new ArgumentNullException();
+
+        StreamReader sr = new StreamReader(ofd.FileName);
+        List<Command> commands = new List<Command>();
+        string? line = sr.ReadLine();
+        while (line is not null) {
+            string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            commands.Add(ConvertCommand(words));
         }
+
         sr.Close();
-        return program;
+        return new Program(commands);
     }
 
-    private Command ConvertCommand(string[] words)
-    {
-        Command command = null!;
-
-        return command!;
-    }
+    private static Command ConvertCommand(string[] words) 
+        => CommandFactory.CreateInstance(words) ?? throw new NotImplementedException();
 }

@@ -19,8 +19,10 @@ public class Player : ICloneable
 
     public Player(CardinalDir cardDir) : this(Point.Empty, cardDir) { }
 
-    public object Clone()
-    {
-        return (Player)base.MemberwiseClone();
-    }
+    /// <summary>
+    /// Creates a copy of the Player instance.
+    /// </summary>
+    /// <returns>A Memberwise Copy of this Player Instance.</returns>
+    public object Clone() 
+        => (Player)base.MemberwiseClone();
 }

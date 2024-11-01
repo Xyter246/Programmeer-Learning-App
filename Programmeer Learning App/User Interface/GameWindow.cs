@@ -92,4 +92,7 @@ public class GameWindow : Form
 
     public void exportButton_Click(object? o, EventArgs ea) 
         => TXTFileWriter.WriteFile(_blockWindow.Program());
+
+    public void importButton_Click(object? o, EventArgs ea)
+        => TXTFileReader.Readfile(); // Returns an Unused Program instance
 }
