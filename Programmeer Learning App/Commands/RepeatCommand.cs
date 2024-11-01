@@ -35,13 +35,6 @@ public class RepeatCommand : Command
     public void Add(Command cmd)
         => this.Commands.Add(cmd);
 
-    public override string ToString()
-    {
-        string rtnString = $"RepeatCommand {_repeatCount} [\n";
-
-        foreach (Command cmd in this.Commands)
-            rtnString += cmd + "\n";
-
-        return rtnString + " ]\n";
-    }
+    public override string ToString() 
+        => $"RepeatCommand {_repeatCount}";
 }

@@ -15,7 +15,7 @@ public class RepeatCommandUnitTest
         rptcmd.Add(new TurnCommand(RelativeDir.Right));
         rptcmd.Add(new MoveCommand(3));
 
-        Player player = Player.EmptyPlayer;
+        Player player = Player.Empty;
 
         // Act
         rptcmd.Execute(player);

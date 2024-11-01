@@ -11,18 +11,24 @@ public class TXTFileWriter : IFileWriter
 {
     public static void WriteFile(Program program)
     {
-        OpenFileDialog ofd = new OpenFileDialog();
-        if (ofd.ShowDialog() != DialogResult.OK) return;
+        SaveFileDialog sfd = new SaveFileDialog();
+        sfd.Filter = @"Text Document |*.txt";
+        if (sfd.ShowDialog() != DialogResult.OK) return;
 
-        StreamWriter sw = new StreamWriter(ofd.FileName);
-        WriteList(program.Commands);
+        StreamWriter sw = new StreamWriter(sfd.FileName);
+        WriteList(sw, program.Commands, 0);
         sw.Close();
-        return;
+    }
 
-        void WriteList(List<Command> commands)
-        {
-            foreach (Command command in commands)
-                sw.WriteLine(command.ToString());
+    private static void WriteList(StreamWriter sw, List<Command> commands, int indentCount)
+    {
+        foreach (Command command in commands) {
+            string indentation = "";
+            for (int i = 0; i < indentCount; i++)
+                indentation += "\t";
+            sw.WriteLine(indentation + command.ToString());
+            if (command is RepeatCommand rptcmd)
+                WriteList(sw, rptcmd.Commands, indentCount + 1);
         }
     }
 }

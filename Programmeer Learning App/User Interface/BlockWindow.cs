@@ -64,9 +64,7 @@ internal class BlockWindow : Panel
     }
 
     // Create an instance of Program from the Labels in this window
-    public Program Program(Player player)
-    {
-        return new Program(_commandLabels.ToList());
-    }
+    public Program Program() 
+        => new Program(_commandLabels.ToList());
 }
 

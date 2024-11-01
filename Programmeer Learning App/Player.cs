@@ -6,7 +6,7 @@ namespace Programmeer_Learning_App;
 
 public class Player : ICloneable
 {
-    public static Player EmptyPlayer = new Player(CardinalDir.North);
+    public static Player Empty = new Player(CardinalDir.East);
 
     public Point Pos;
     public CardinalDir FacingDir;
@@ -18,6 +18,7 @@ public class Player : ICloneable
     }
 
     public Player(CardinalDir cardDir) : this(Point.Empty, cardDir) { }
+
     public object Clone()
     {
         return (Player)base.MemberwiseClone();

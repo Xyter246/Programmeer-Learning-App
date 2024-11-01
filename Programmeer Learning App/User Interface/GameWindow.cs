@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Programmeer_Learning_App.Commands;
+using Programmeer_Learning_App.Enums;
 using Programmeer_Learning_App.Exporting;
 using Programmeer_Learning_App.Importing;
 
@@ -14,9 +16,10 @@ namespace Programmeer_Learning_App.User_Interface;
 
 public class GameWindow : Form
 {
+    [STAThread]
     public static void Main(string[] args)
     {
-        Console.WriteLine("Starting up...");
+        Console.WriteLine(@"Starting up...");
         Application.Run(new GameWindow());
     }
 
@@ -87,8 +90,6 @@ public class GameWindow : Form
         this._running = !this._running;
     }
 
-    public void exportButton_Click(object? o, EventArgs ea)
-    {
-        TXTFileWriter.WriteFile(_blockWindow.Program(null!));
-    }
+    public void exportButton_Click(object? o, EventArgs ea) 
+        => TXTFileWriter.WriteFile(_blockWindow.Program());
 }
