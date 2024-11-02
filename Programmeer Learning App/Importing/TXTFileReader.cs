@@ -27,28 +27,28 @@ public class TXTFileReader : IFileReader
         sr.Close();
         return new Program(commands);
 
-        static List<Command> Readlist(StreamReader sr, int currentIndent)
-        {
-            List<Command> commands = new List<Command>();
-            while (sr.ReadLine() is { } line) {
-                string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                int indent = CalcIndent(words);
-                Command? cmd = ConvertCommand(CleanWords(words));
-
-                if (cmd is null)
-                    throw new ArgumentException($"Text file contains invalid contents: {words}");
-                if (indent < currentIndent)
-                    return commands;
-                if (cmd is LoopCommand lpcmd)
-                    lpcmd.Commands = Readlist(sr, currentIndent + 1);
-
-                commands.Add(cmd);
-            }
-
-            return commands;
-        }
     }
 
+    private static List<Command> Readlist(StreamReader sr, int currentIndent)
+    {
+        List<Command> commands = new List<Command>();
+        while (sr.ReadLine() is { } line) {
+            string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int indent = CalcIndent(words);
+            Command? cmd = ConvertCommand(CleanWords(words));
+
+            if (cmd is null)
+                throw new ArgumentException($"Text file contains invalid contents: {words}");
+            if (indent < currentIndent)
+                return commands;
+            if (cmd is LoopCommand lpcmd)
+                lpcmd.Commands = Readlist(sr, currentIndent + 1);
+
+            commands.Add(cmd);
+        }
+
+        return commands;
+    }
 
     private static int CalcIndent(string[] words) 
         => words[0].Split('\t').Length - 1;
