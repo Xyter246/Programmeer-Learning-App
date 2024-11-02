@@ -22,32 +22,38 @@ public class TXTFileReader : IFileReader
             return null;
 
         StreamReader sr = new StreamReader(ofd.FileName);
-        List<Command> commands = Readlist(sr, 0);
+        (List<Command> commands, _) = Readlist(sr, 0);
         
         sr.Close();
         return new Program(commands);
-
     }
 
-    private static List<Command> Readlist(StreamReader sr, int currentIndent)
+    private static (List<Command>, string?) Readlist(StreamReader sr, int currentIndent)
     {
         List<Command> commands = new List<Command>();
-        while (sr.ReadLine() is { } line) {
+        string? line = sr.ReadLine();
+        while (line is not null) {
+            // Instantiate the String as a Command.
             string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             int indent = CalcIndent(words);
             Command? cmd = ConvertCommand(CleanWords(words));
 
             if (cmd is null)
                 throw new ArgumentException($"Text file contains invalid contents: {words}");
+
+            // if the new Command is less indented than the current Command, go back once.
             if (indent < currentIndent)
-                return commands;
-            if (cmd is LoopCommand lpcmd)
-                lpcmd.Commands = Readlist(sr, currentIndent + 1);
-
+                return (commands, line);
             commands.Add(cmd);
-        }
 
-        return commands;
+            // if this is a LoopCommand, add new Commands as part of this Command.
+            if (cmd is LoopCommand lpcmd) {
+                (lpcmd.Commands, line) = Readlist(sr, currentIndent + 1);
+                continue;
+            }
+            line = sr.ReadLine();
+        }
+        return (commands, null);
     }
 
     private static int CalcIndent(string[] words) 
