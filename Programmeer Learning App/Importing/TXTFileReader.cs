@@ -10,35 +10,60 @@ namespace Programmeer_Learning_App.Importing;
 
 public class TXTFileReader : IFileReader
 {
-    public static Program Readfile()
+    /// <summary>
+    /// Creates a Program instance from a Saved Text Document on the User's device.
+    /// </summary>
+    /// <returns>A Program instance, or Null if no valid file was found.</returns>
+    public static Program? Readfile()
     {
         OpenFileDialog ofd = new OpenFileDialog();
         ofd.Filter = @"Text Documents (*.txt)|*.txt|All files (*.*)|*.*";
-        if (ofd.ShowDialog() != DialogResult.OK || ofd.FileName == string.Empty) 
-            throw new ArgumentException();
-        if (ofd.FileName == null)
-            throw new ArgumentNullException();
+        if (ofd.ShowDialog() != DialogResult.OK || ofd.FileName == string.Empty)
+            return null;
 
         StreamReader sr = new StreamReader(ofd.FileName);
-        List<Command> commands = new List<Command>();
-        string? line = sr.ReadLine();
-        while (line is not null) {
-            string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            int indentCount = CalcIndent(ref words);
-            commands.Add(ConvertCommand(words));
-        }
-
+        List<Command> commands = Readlist(sr, 0);
+        
         sr.Close();
         return new Program(commands);
+
+        static List<Command> Readlist(StreamReader sr, int currentIndent)
+        {
+            List<Command> commands = new List<Command>();
+            while (sr.ReadLine() is { } line) {
+                string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                int indent = CalcIndent(words);
+                Command? cmd = ConvertCommand(CleanWords(words));
+
+                if (cmd is null)
+                    throw new ArgumentException($"Text file contains invalid contents: {words}");
+                if (indent < currentIndent)
+                    return commands;
+                if (cmd is LoopCommand lpcmd)
+                    lpcmd.Commands = Readlist(sr, currentIndent + 1);
+
+                commands.Add(cmd);
+            }
+
+            return commands;
+        }
     }
 
-    private static int CalcIndent(ref string[] words)
+
+    private static int CalcIndent(string[] words) 
+        => words[0].Split('\t').Length - 1;
+
+    private static string[] CleanWords(string[] words)
     {
-        string[] tabsStrings = words[0].Split('\t');
-        words[0] = tabsStrings[^1];
-        return tabsStrings.Length - 1;
+        words[0] = words[0].Split('\t')[^1];
+        return words;
     }
 
-    private static Command ConvertCommand(string[] words) 
-        => CommandFactory.CreateInstance(words) ?? throw new NotImplementedException();
+    /// <summary>
+    /// Creates a Command instance from a series of strings.
+    /// </summary>
+    /// <param name="words">A series of strings to convert to a Command.</param>
+    /// <returns>A Command instance, or Null if the string is invalid.</returns>
+    private static Command? ConvertCommand(string[] words) 
+        => CommandFactory.CreateInstance(words) ?? null;
 }

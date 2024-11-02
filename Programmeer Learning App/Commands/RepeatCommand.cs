@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Programmeer_Learning_App.Commands;
 
-public class RepeatCommand : Command
+public class RepeatCommand : LoopCommand
 {
-    public List<Command> Commands;
     private readonly int _repeatCount;
 
     public RepeatCommand(int repeatCount, List<Command> commands)

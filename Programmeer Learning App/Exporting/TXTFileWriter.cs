@@ -37,8 +37,8 @@ public class TXTFileWriter : IFileWriter
             for (int i = 0; i < indentCount; i++)
                 indentation += "\t";
             sw.WriteLine(indentation + command.ToString());
-            if (command is RepeatCommand rptcmd)
-                WriteList(sw, rptcmd.Commands, indentCount + 1);
+            if (command is LoopCommand lpcmd)
+                WriteList(sw, lpcmd.Commands, indentCount + 1);
         }
     }
 }
