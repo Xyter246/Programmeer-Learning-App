@@ -36,7 +36,7 @@ public class TXTFileReader : IFileReader
             // Instantiate the String as a Command.
             string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             int indent = CalcIndent(words);
-            Command? cmd = ConvertCommand(CleanWords(words));
+            Command? cmd = ConvertCommand(words.RemoveTabs());
 
             if (cmd is null)
                 throw new ArgumentException($"Text file contains invalid contents: {words}");
@@ -59,12 +59,6 @@ public class TXTFileReader : IFileReader
     private static int CalcIndent(string[] words) 
         => words[0].Split('\t').Length - 1;
 
-    private static string[] CleanWords(string[] words)
-    {
-        words[0] = words[0].Split('\t')[^1];
-        return words;
-    }
-
     /// <summary>
     /// Creates a Command instance from a series of strings.
     /// </summary>
@@ -72,4 +66,13 @@ public class TXTFileReader : IFileReader
     /// <returns>A Command instance, or Null if the string is invalid.</returns>
     private static Command? ConvertCommand(string[] words) 
         => CommandFactory.CreateInstance(words) ?? null;
+}
+
+file static class Func
+{
+    public static string[] RemoveTabs(this string[] words)
+    {
+        words[0] = words[0].Split('\t')[^1];
+        return words;
+    }
 }
