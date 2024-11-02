@@ -22,9 +22,6 @@ public class TurnCommand : Command
     public override string ToString()
         => $"TurnCommand {_relativeDir}";
 
-    public override Command FromString(string[] words)
-    {
-        Enum.TryParse(words[1], out RelativeDir relDir);
-        return new TurnCommand(relDir);
-    }
+    public override Command? FromString(string[] words)
+        => Enum.TryParse(words[1], out RelativeDir relDir) ? new TurnCommand(relDir) : null;
 }

@@ -28,6 +28,11 @@ public class MoveCommand : Command
     public override string ToString()
         => $"MoveCommand {MoveAmount}";
 
-    public override Command FromString(string[] words) 
-        => new MoveCommand(int.Parse(words[1]));
+    public override Command? FromString(string[] words)
+    {
+        try {
+            int i = int.Parse(words[0]);
+            return new MoveCommand(i);
+        } catch { return null; }
+    }
 }

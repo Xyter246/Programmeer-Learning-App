@@ -31,12 +31,21 @@ public class RepeatCommand : LoopCommand
         }
     }
 
+    /// <summary>
+    /// Adds an object to the end of the RepeatCommand.
+    /// </summary>
+    /// <param name="cmd">Command which is to be added.</param>
     public void Add(Command cmd)
         => this.Commands.Add(cmd);
 
     public override string ToString() 
         => $"RepeatCommand {_repeatCount}";
 
-    public override Command FromString(string[] words)
-        => new RepeatCommand(int.Parse(words[1]));
+    public override Command? FromString(string[] words)
+    {
+        try {
+            int i = int.Parse(words[0]);
+            return new RepeatCommand(i);
+        } catch { return null; }
+    }
 }
