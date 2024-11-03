@@ -1,4 +1,4 @@
-﻿namespace Programmeer_Learning_App.Metrics;
+﻿namespace Programmeer_Learning_App;
 
 public static class Metric
 {

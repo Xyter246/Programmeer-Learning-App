@@ -6,14 +6,15 @@ public class MetricUnitTest
     public void NumOfCommands()
     {
         // Arrange
-        Program program = new Program();
-        program.Add(new TurnCommand(RelativeDir.Right));
-        program.Add(new MoveCommand(1));
-        program.Add(new RepeatCommand(4, new List<Command>() {
+        Program program = new Program(new List<Command>() {
             new TurnCommand(RelativeDir.Right),
-            new MoveCommand(3)
-        }));
-
+            new MoveCommand(1),
+            new RepeatCommand(4, new List<Command>() {
+                new TurnCommand(RelativeDir.Right),
+                new MoveCommand(3)
+            })
+        });
+        
         // Act
         int commandCount = program.NumOfCommands();
 
@@ -25,8 +26,7 @@ public class MetricUnitTest
     public void MaxNestingDepth()
     {
         // Arrange
-        Program program = new Program();
-        program.Add(
+        Program program = new Program(new List<Command>() {
         new RepeatCommand(2, new List<Command>() {
             new TurnCommand(RelativeDir.Right),
             new MoveCommand(3),
@@ -37,14 +37,12 @@ public class MetricUnitTest
             new RepeatCommand(2, new List<Command>() {
                 new TurnCommand(RelativeDir.Right),
                 new MoveCommand(3)
-            })
-        }));
-        program.Add(
+            })}),
         new RepeatCommand(2, new List<Command>() {
             new TurnCommand(RelativeDir.Right),
             new MoveCommand(3)
-        }));
-
+        })});
+        
         // Act
         int commandCount = program.MaxNestingDepth();
 
@@ -56,8 +54,7 @@ public class MetricUnitTest
     public void NumOfRepeatCommands()
     {
         // Arrange
-        Program program = new Program();
-        program.Add(
+        Program program = new Program(new List<Command>() {
         new RepeatCommand(1, new List<Command>() { 
             new RepeatCommand(1, new List<Command>() {
                 new RepeatCommand(1, new List<Command>() {
@@ -71,7 +68,7 @@ public class MetricUnitTest
                     }) 
                 })
             })
-        }));
+        })});
 
         // Act
         int commandCount = program.NumOfRepeatCommands();
