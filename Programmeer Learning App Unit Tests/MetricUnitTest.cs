@@ -61,7 +61,7 @@ public class MetricUnitTest
                     new MoveCommand(1)
                 })
             }),
-            new RepeatCommand(1, new List<Command>(){
+            new RepeatCommand(1, new List<Command>() {
                 new RepeatCommand(1, new List<Command>() { 
                     new RepeatCommand(1, new List <Command>() {
                         new TurnCommand(RelativeDir.Right)
