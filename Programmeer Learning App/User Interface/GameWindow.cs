@@ -5,7 +5,7 @@ namespace Programmeer_Learning_App.User_Interface;
 
 public class GameWindow : Form
 {
-    [STAThread]
+    [STAThread] // Required for Importing and Exporting.
     public static void Main(string[] args)
     {
         Console.WriteLine(@"Starting up...");
@@ -83,5 +83,6 @@ public class GameWindow : Form
         => TXTFileWriter.WriteFile(_blockWindow.Program());
 
     public void importButton_Click(object? o, EventArgs ea)
-        => TXTFileReader.Readfile(); // Returns an Program instance, but is unused as this function's return type is void.
+    // Returns an Program instance, but is unused as this function's return type is void.
+        => TXTFileReader.Readfile(); 
 }
