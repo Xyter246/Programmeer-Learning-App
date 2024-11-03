@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Programmeer_Learning_App.Commands;
-
-namespace Programmeer_Learning_App.Exporting;
+﻿namespace Programmeer_Learning_App.Exporting;
 
 public class TXTFileWriter : IFileWriter
 {

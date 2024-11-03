@@ -1,12 +1,4 @@
-﻿using Programmeer_Learning_App.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Programmeer_Learning_App.Importing;
+﻿namespace Programmeer_Learning_App.Importing;
 
 public class TXTFileReader : IFileReader
 {

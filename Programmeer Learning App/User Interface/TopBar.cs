@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Programmeer_Learning_App.User_Interface
+﻿namespace Programmeer_Learning_App.User_Interface
 {
     public class TopBar : Label
     {

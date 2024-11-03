@@ -1,8 +1,4 @@
-﻿using System;
-using System.Numerics;
-using Programmeer_Learning_App.Enums;
-
-namespace Programmeer_Learning_App;
+﻿namespace Programmeer_Learning_App;
 
 public static class Functions
 {

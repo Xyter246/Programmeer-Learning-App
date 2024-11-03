@@ -1,13 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
-using Xunit;
-
-namespace Programmeer_Learning_App.Commands;
+﻿namespace Programmeer_Learning_App.Commands;
 
 public class MoveCommand : Command
 {

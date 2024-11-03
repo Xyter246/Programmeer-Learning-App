@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Programmeer_Learning_App.Commands;
-
-namespace Programmeer_Learning_App;
+﻿namespace Programmeer_Learning_App;
 
 public class Program
 {

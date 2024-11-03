@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Programmeer_Learning_App.Commands;
-using Programmeer_Learning_App.Enums;
-using Programmeer_Learning_App.Exporting;
+﻿using Programmeer_Learning_App.Exporting;
 using Programmeer_Learning_App.Importing;
 
 namespace Programmeer_Learning_App.User_Interface;

@@ -1,14 +1,4 @@
-﻿using Programmeer_Learning_App.Commands;
-using Programmeer_Learning_App.Enums;
-using Programmeer_Learning_App;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Programmeer_Learning_App_Unit_Tests;
+﻿namespace Programmeer_Learning_App_Unit_Tests;
 
 public class MetricUnitTest
 {
@@ -25,7 +15,7 @@ public class MetricUnitTest
         }));
 
         // Act
-        int commandCount = Metric.NumOfCommands(program);
+        int commandCount = program.NumOfCommands();
 
         // Assert
         Assert.Equal(5, commandCount);
@@ -56,7 +46,7 @@ public class MetricUnitTest
         }));
 
         // Act
-        int commandCount = Metric.MaxNestingDepth(program);
+        int commandCount = program.MaxNestingDepth();
 
         // Assert
         Assert.Equal(2, commandCount);
@@ -84,7 +74,7 @@ public class MetricUnitTest
         }));
 
         // Act
-        int commandCount = Metric.NumOfRepeatCommands(program);
+        int commandCount = program.NumOfRepeatCommands();
 
         // Assert
         Assert.Equal(6, commandCount);
@@ -108,7 +98,7 @@ public class MetricUnitTest
         });
 
         // Act
-        (Point, Size) results = Metric.MaxGridSize(program, player);
+        (Point, Size) results = program.MaxGridSize(player);
 
         // Assert
         Assert.Equal(new Point(-1, 0), results.Item1);

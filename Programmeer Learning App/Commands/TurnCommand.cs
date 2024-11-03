@@ -1,12 +1,4 @@
-﻿using Programmeer_Learning_App.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
-namespace Programmeer_Learning_App.Commands;
+﻿namespace Programmeer_Learning_App.Commands;
 
 public class TurnCommand : Command
 {
