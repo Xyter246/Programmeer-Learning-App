@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App_Unit_Tests;
+﻿using Programmeer_Learning_App.Entities;
+
+namespace Programmeer_Learning_App_Unit_Tests;
 
 public class MetricUnitTest
 {

@@ -1,10 +1,9 @@
-﻿namespace Programmeer_Learning_App;
+﻿namespace Programmeer_Learning_App.Entities;
 
-public class Player : ICloneable
+public class Player : Entity, ICloneable
 {
     public static Player Empty = new Player(CardinalDir.East);
 
-    public Point Pos;
     public CardinalDir FacingDir;
 
     public Player(Point pos, CardinalDir facingDir)
@@ -19,6 +18,6 @@ public class Player : ICloneable
     /// Creates a copy of the Player instance.
     /// </summary>
     /// <returns>A Memberwise Copy of this Player Instance.</returns>
-    public object Clone() 
-        => (Player)base.MemberwiseClone();
+    public object Clone()
+        => (Player)MemberwiseClone();
 }

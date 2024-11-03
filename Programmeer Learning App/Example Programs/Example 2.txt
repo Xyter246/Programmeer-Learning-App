@@ -1,0 +1,5 @@
+MoveCommand 3
+TurnCommand Left
+RepeatCommand 3
+	MoveCommand 2
+	TurnCommand Right

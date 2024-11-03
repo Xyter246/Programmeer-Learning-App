@@ -83,5 +83,5 @@ public class GameWindow : Form
         => TXTFileWriter.WriteFile(_blockWindow.Program());
 
     public void importButton_Click(object? o, EventArgs ea)
-        => TXTFileReader.Readfile(); // Returns an Unused Program instance
+        => TXTFileReader.Readfile(); // Returns an Program instance, but is unused as this function's return type is void.
 }

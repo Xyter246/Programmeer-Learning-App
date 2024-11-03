@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App_Unit_Tests.Commands;
+﻿using Programmeer_Learning_App.Entities;
+
+namespace Programmeer_Learning_App_Unit_Tests.Commands;
 
 public class RepeatCommandUnitTest
 {

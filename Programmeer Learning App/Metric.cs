@@ -13,8 +13,7 @@ public static class Metric
 
         int RecursiveRepeat(List<Command> commands, int count)
         {
-            foreach (Command cmd in commands)
-            {
+            foreach (Command cmd in commands) {
                 count++;
                 if (cmd is RepeatCommand rptcmd)
                     count = RecursiveRepeat(rptcmd.Commands, count);

@@ -29,7 +29,7 @@ public class TXTFileWriter : IFileWriter
             string indentation = "";
             for (int i = 0; i < indentCount; i++)
                 indentation += "\t";
-            sw.WriteLine(indentation + command.ToString());
+            sw.WriteLine(indentation + command);
             if (command is LoopCommand lpcmd)
                 WriteList(sw, lpcmd.Commands, indentCount + 1);
         }

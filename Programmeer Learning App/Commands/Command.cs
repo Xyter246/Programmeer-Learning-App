@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App.Commands;
+﻿using Programmeer_Learning_App.Entities;
+
+namespace Programmeer_Learning_App.Commands;
 
 public abstract class Command
 {
