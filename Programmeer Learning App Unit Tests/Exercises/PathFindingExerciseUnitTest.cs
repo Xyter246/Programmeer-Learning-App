@@ -1,5 +1,4 @@
-﻿using Programmeer_Learning_App.Entities;
-using Programmeer_Learning_App.Exercises;
+﻿using Programmeer_Learning_App.Exercises;
 
 namespace Programmeer_Learning_App_Unit_Tests.Exercises;
 
@@ -39,9 +38,9 @@ public class PathFindingExerciseUnitTest
         }));
     }
 
-    private bool NullChecker(PathFindingExercise pfe, Point[] points)
+    private static bool NullChecker(PathFindingExercise pfe, Point[] points)
         => points.All(p => pfe.Grid[p.X, p.Y] is null);
 
-    private bool BlockadeChecker(PathFindingExercise pfe, Point[] points) 
+    private static bool BlockadeChecker(PathFindingExercise pfe, Point[] points) 
         => points.All(p => pfe.Grid[p.X, p.Y]?.GetType() == typeof(Blockade));
 }
