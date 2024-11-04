@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Programmeer_Learning_App.Importing;
+﻿namespace Programmeer_Learning_App.Importing;
 
 public interface IFileReader
 {
-    Program Readfile(string filename);
+    /// <summary>
+    /// Creates a Program instance by reading the selected file (via OpenFileDialog).
+    /// </summary>
+    /// <returns>A Program instance, or Null if there was a wrong filepath.</returns>
+    static abstract Program? Readfile();
 }

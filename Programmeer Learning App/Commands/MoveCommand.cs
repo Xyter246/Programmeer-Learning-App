@@ -1,11 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
-using Xunit;
+﻿using Programmeer_Learning_App.Entities;
 
 namespace Programmeer_Learning_App.Commands;
 
@@ -27,4 +20,12 @@ public class MoveCommand : Command
 
     public override string ToString()
         => $"MoveCommand {MoveAmount}";
+
+    public override Command? FromString(string[] words)
+    {
+        try {
+            int i = int.Parse(words[0]);
+            return new MoveCommand(i);
+        } catch { return null; }
+    }
 }

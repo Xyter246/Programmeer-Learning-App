@@ -1,12 +1,4 @@
-﻿using Programmeer_Learning_App.Commands;
-using Programmeer_Learning_App.Enums;
-using Programmeer_Learning_App;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Programmeer_Learning_App.Entities;
 
 namespace Programmeer_Learning_App_Unit_Tests;
 
@@ -16,16 +8,17 @@ public class MetricUnitTest
     public void NumOfCommands()
     {
         // Arrange
-        Program program = new Program(Player.EmptyPlayer);
-        program.Add(new TurnCommand(RelativeDir.Right));
-        program.Add(new MoveCommand(1));
-        program.Add(new RepeatCommand(4, new List<Command>() {
+        Program program = new Program(new List<Command>() {
             new TurnCommand(RelativeDir.Right),
-            new MoveCommand(3)
-        }));
-
+            new MoveCommand(1),
+            new RepeatCommand(4, new List<Command>() {
+                new TurnCommand(RelativeDir.Right),
+                new MoveCommand(3)
+            })
+        });
+        
         // Act
-        int commandCount = Metric.NumOfCommands(program);
+        int commandCount = program.NumOfCommands();
 
         // Assert
         Assert.Equal(5, commandCount);
@@ -35,8 +28,7 @@ public class MetricUnitTest
     public void MaxNestingDepth()
     {
         // Arrange
-        Program program = new Program(Player.EmptyPlayer);
-        program.Add(
+        Program program = new Program(new List<Command>() {
         new RepeatCommand(2, new List<Command>() {
             new TurnCommand(RelativeDir.Right),
             new MoveCommand(3),
@@ -47,16 +39,14 @@ public class MetricUnitTest
             new RepeatCommand(2, new List<Command>() {
                 new TurnCommand(RelativeDir.Right),
                 new MoveCommand(3)
-            })
-        }));
-        program.Add(
+            })}),
         new RepeatCommand(2, new List<Command>() {
             new TurnCommand(RelativeDir.Right),
             new MoveCommand(3)
-        }));
-
+        })});
+        
         // Act
-        int commandCount = Metric.MaxNestingDepth(program);
+        int commandCount = program.MaxNestingDepth();
 
         // Assert
         Assert.Equal(2, commandCount);
@@ -66,23 +56,51 @@ public class MetricUnitTest
     public void NumOfRepeatCommands()
     {
         // Arrange
-        Program program = new Program(Player.EmptyPlayer);
-        program.Add(
+        Program program = new Program(new List<Command>() {
         new RepeatCommand(1, new List<Command>() { 
             new RepeatCommand(1, new List<Command>() {
-                new RepeatCommand(1, new List<Command>())
+                new RepeatCommand(1, new List<Command>() {
+                    new MoveCommand(1)
+                })
             }),
-            new RepeatCommand(1, new List<Command>(){
+            new RepeatCommand(1, new List<Command>() {
                 new RepeatCommand(1, new List<Command>() { 
-                    new RepeatCommand(1, new List <Command>()) 
+                    new RepeatCommand(1, new List <Command>() {
+                        new TurnCommand(RelativeDir.Right)
+                    }) 
                 })
             })
-        }));
+        })});
 
         // Act
-        int commandCount = Metric.NumOfRepeatCommands(program);
+        int commandCount = program.NumOfRepeatCommands();
 
         // Assert
         Assert.Equal(6, commandCount);
+    }
+
+    [Fact]
+    public void MaxGridSize()
+    {
+        // Arrange
+        Player player = new Player(new Point(0, 0), CardinalDir.East);
+        Program program = new Program(new List<Command>() {
+            new MoveCommand(5),
+            new TurnCommand(RelativeDir.Right),
+            new MoveCommand(2),
+            new TurnCommand(RelativeDir.Right),
+            new MoveCommand(2),
+            new TurnCommand(RelativeDir.Left),
+            new MoveCommand(5),
+            new TurnCommand(RelativeDir.Right),
+            new MoveCommand(4)
+        });
+
+        // Act
+        (Point, Size) results = program.MaxGridSize(player);
+
+        // Assert
+        Assert.Equal(new Point(-1, 0), results.Item1);
+        Assert.Equal(new Size(6, 7), results.Item2);
     }
 }

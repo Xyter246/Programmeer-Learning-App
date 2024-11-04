@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Programmeer_Learning_App.Entities;
 
 namespace Programmeer_Learning_App.Commands;
 
-public class RepeatCommand : Command
+public class RepeatCommand : LoopCommand
 {
-    public List<Command> Commands;
     private readonly int _repeatCount;
 
-    public RepeatCommand(int repeatCount, List<Command>? commands = null)
+    public RepeatCommand(int repeatCount, List<Command> commands)
     {
         _repeatCount = repeatCount;
-
-        commands ??= new List<Command>();
         Commands = commands;
     }
+
+    public RepeatCommand(int repeatCount) : this(repeatCount, new List<Command>()) { }
 
     public override void Execute(Player player)
     {
@@ -32,16 +27,21 @@ public class RepeatCommand : Command
         }
     }
 
+    /// <summary>
+    /// Adds an object to the end of the RepeatCommand.
+    /// </summary>
+    /// <param name="cmd">Command which is to be added.</param>
     public void Add(Command cmd)
         => this.Commands.Add(cmd);
 
-    public override string ToString()
+    public override string ToString() 
+        => $"RepeatCommand {_repeatCount}";
+
+    public override Command? FromString(string[] words)
     {
-        string rtnString = $"RepeatCommand {_repeatCount} [ \n";
-
-        foreach (Command cmd in this.Commands)
-            rtnString += cmd + "\n";
-
-        return rtnString + " ] \n";
+        try {
+            int i = int.Parse(words[0]);
+            return new RepeatCommand(i);
+        } catch { return null; }
     }
 }

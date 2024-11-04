@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Programmeer_Learning_App.Enums;
+﻿namespace Programmeer_Learning_App.Enums;
 
 public enum CardinalDir
 {

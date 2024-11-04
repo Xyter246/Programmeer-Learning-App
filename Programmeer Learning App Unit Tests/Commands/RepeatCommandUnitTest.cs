@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using Programmeer_Learning_App;
-using Programmeer_Learning_App.Commands;
-using Programmeer_Learning_App.Enums;
+﻿using Programmeer_Learning_App.Entities;
 
 namespace Programmeer_Learning_App_Unit_Tests.Commands;
 
@@ -11,11 +8,11 @@ public class RepeatCommandUnitTest
     public void RepeatsCommands()
     {
         // Arrange
-        RepeatCommand rptcmd = new(4);
+        RepeatCommand rptcmd = new RepeatCommand(4);
         rptcmd.Add(new TurnCommand(RelativeDir.Right));
         rptcmd.Add(new MoveCommand(3));
 
-        Player player = Player.EmptyPlayer;
+        Player player = Player.Empty;
 
         // Act
         rptcmd.Execute(player);
