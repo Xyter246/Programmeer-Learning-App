@@ -19,7 +19,6 @@ internal class BlockWindow : Panel
 
     public BlockWindow()
     {
-        this.AutoSize = false;
         this.BackColor = Color.Pink;
         this.AutoScroll = true;
 

@@ -19,7 +19,6 @@ public class CommandWindow : Panel
     {
         // Setup CommandWindow properties
         this.AutoScroll = true; // Enable scrolling on CommandWindow
-        this.Anchor = AnchorStyles.Top | AnchorStyles.Bottom; // Anchor to make it resizable
         this.BackColor = Color.Blue;
 
         // Create a scrollable inner panel
