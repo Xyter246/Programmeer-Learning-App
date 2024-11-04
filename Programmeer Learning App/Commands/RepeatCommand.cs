@@ -4,7 +4,10 @@ namespace Programmeer_Learning_App.Commands;
 
 public class RepeatCommand : LoopCommand
 {
+    public override string Name => "Repeat";
+
     private readonly int _repeatCount;
+    
 
     public RepeatCommand(int repeatCount, List<Command> commands)
     {

@@ -4,6 +4,8 @@ namespace Programmeer_Learning_App.Commands;
 
 public abstract class Command
 {
+    public abstract string Name { get; } // name of the command
+
     /// <summary>
     /// Executes the corresponding command upon a Player instance
     /// </summary>

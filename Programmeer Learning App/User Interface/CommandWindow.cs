@@ -1,16 +1,18 @@
 ﻿namespace Programmeer_Learning_App.User_Interface;
 
-public class CommandWindow : Panel
+internal class CommandWindow : Panel
 {   
-
     // Class written by AI
     private readonly Panel _buttonPanel;
     private readonly Button _moveCmdButton;
     private readonly Button _repeatCmdButton;
     private readonly Button _turnCmdButton;
+    private readonly BlockWindow _blockWindow;
 
-    public CommandWindow()
+    public CommandWindow(BlockWindow blockWindow)
     {
+        _blockWindow = blockWindow;
+
         // Setup CommandWindow properties
         this.AutoScroll = true; // Enable scrolling on CommandWindow
         this.BackColor = Color.Blue;
@@ -60,13 +62,13 @@ public class CommandWindow : Panel
 
         switch (button.Text) {
             case "Move":
-                ///BlockWindow.AddCommand(new Commands.MoveCommand(1));
+                _blockWindow.AddCommand(new Commands.MoveCommand(1));
                 break;
             case "Repeat":
-                //BlockWindow.AddCommand(new Commands.RepeatCommand(1));
+                _blockWindow.AddCommand(new Commands.RepeatCommand(1));
                 break;
             case "Turn":
-                //BlockWindow.AddCommand(new Commands.TurnCommand(Enums.RelativeDir.Left));
+                _blockWindow.AddCommand(new Commands.TurnCommand(Enums.RelativeDir.Left));
                 break;
             default:
                 return;

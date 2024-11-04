@@ -37,15 +37,15 @@ public class GameWindow : Form
         this.UsableStartLocation = _topBar.Height;
         #endregion
 
-        #region CommandWindow
-        _cmdWindow = new CommandWindow();
-        _cmdWindow.Location = new Point(0, UsableStartLocation);
-        this.Controls.Add(_cmdWindow);
-        #endregion
-
         #region BlockWindow
         _blockWindow = new BlockWindow();
         this.Controls.Add(_blockWindow);
+        #endregion
+
+        #region CommandWindow
+        _cmdWindow = new CommandWindow(_blockWindow);
+        _cmdWindow.Location = new Point(0, UsableStartLocation);
+        this.Controls.Add(_cmdWindow);
         #endregion
 
         this.OnResize(null, null);

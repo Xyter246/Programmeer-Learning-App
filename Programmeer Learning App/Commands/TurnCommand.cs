@@ -4,6 +4,8 @@ namespace Programmeer_Learning_App.Commands;
 
 public class TurnCommand : Command
 {
+    public override string Name => "Turn";
+
     private readonly RelativeDir _relativeDir;
 
     public TurnCommand(RelativeDir relativeDir)
