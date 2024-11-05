@@ -64,7 +64,7 @@ public class GameWindow : Form
     {
 
         if (!this._running) {
-            _runWindow = new RunWindow(new Size(4, 4));
+            _runWindow = new RunWindow(_blockWindow.Program());
             this.Controls.Add(_runWindow);
         }
 
