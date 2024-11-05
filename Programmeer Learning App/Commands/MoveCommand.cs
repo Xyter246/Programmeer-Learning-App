@@ -4,8 +4,6 @@ namespace Programmeer_Learning_App.Commands;
 
 public class MoveCommand : Command
 {
-    public override string Name => "Move";
-
     public int MoveAmount;
 
     public MoveCommand(int moveAmount)

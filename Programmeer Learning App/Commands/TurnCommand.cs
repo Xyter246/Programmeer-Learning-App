@@ -4,14 +4,13 @@ namespace Programmeer_Learning_App.Commands;
 
 public class TurnCommand : Command
 {
-    public override string Name => "Turn";
-
     private readonly RelativeDir _relativeDir;
 
     public TurnCommand(RelativeDir relativeDir)
     {
         _relativeDir = relativeDir;
     }
+
     public override void Execute(Player player)
         => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)_relativeDir) % Enum.GetNames(typeof(CardinalDir)).Length);
 
