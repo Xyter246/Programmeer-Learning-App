@@ -1,6 +1,9 @@
 ﻿namespace Programmeer_Learning_App.User_Interface;
 
-internal class BlockWindow : Panel
+// This classes layout had been hand made, methods return types, parameters etc. 
+// After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
+// After that we changed the code again to fit our vision of the class
+public class BlockWindow : Panel
 {
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
     private readonly List<Command> _commandList; // List to track command labels
@@ -58,6 +61,11 @@ internal class BlockWindow : Panel
         UpdateScreen(_commandList);
     }
 
+    private void ChangeCount(Command command, int amount)
+    {
+        throw new NotImplementedException();
+    }
+
     private void UpdateScreen(List<Command> commandList)
     {
         _blockPanel.Controls.Clear();
@@ -66,7 +74,7 @@ internal class BlockWindow : Panel
         foreach (Command command in commandList) {
             Label commandLabel = new Label {
                 Text = command.Name,
-                AutoSize = true,
+                Size = new Size(80, 30),
                 Location = _labelLocation,
                 BackColor = Color.LightGray,
                 Padding = new Padding(5),
@@ -90,44 +98,46 @@ internal class BlockWindow : Panel
 
     private void OnHover(object? o, EventArgs ea)
     {
-        if (o is not Label label || label.Tag is not Command command) return;
+        if (o is not Label commandLabel || commandLabel.Tag is not Command command) return;
 
         // Create the panels for the up and down triangles
-        Panel upArrow = CreateTriangleBox(true, command);
-        Panel downArrow = CreateTriangleBox(false, command);
+        Panel upArrow = CreateTriangleBox(true);
+        Panel downArrow = CreateTriangleBox(false);
+        
 
         // Move the command up in the list
         upArrow.Click += (sender, e) => {
-            if (sender is Panel panel && panel.Tag is Command cmd)
+            if (sender is Panel panel && panel.Parent!.Tag is Command cmd)
                 UpdatePositions(cmd, true);
         };
 
         // Move the command down in the list
         downArrow.Click += (sender, e) => {
-            if (sender is Panel panel && panel.Tag is Command cmd)
+            if (sender is Panel panel && panel.Parent!.Tag is Command cmd)
                 UpdatePositions(cmd, false);
         };
 
         // Add the boxes to the label's parent container so they overlay correctly
-        label.Controls.Add(upArrow);
-        label.Controls.Add(downArrow);
+        commandLabel.Controls.Add(upArrow);
+        commandLabel.Controls.Add(downArrow);
 
         // Position the boxes on the label
-        PositionBoxes(label, upArrow, downArrow);
+        PositionBoxes(commandLabel, upArrow, downArrow);
 
-        ShowTriangles(o, ea);
+        ShowControls(o, ea);
 
-        void ShowTriangles(object? sender, EventArgs e)
+        void ShowControls(object? sender, EventArgs e)
         {
             isHovering = true;
             upArrow.Visible = true;
             downArrow.Visible = true;
         }
 
-        void HideTriangles(object? sender, EventArgs e)
+        void HideControls(object? sender, EventArgs e)
         {
             isHovering = false;
-            Task.Delay(1).ContinueWith(_ => {
+            Task.Delay(1).ContinueWith(_ =>
+            {
                 if (!isHovering) {
                     upArrow.Visible = false;
                     downArrow.Visible = false;
@@ -135,21 +145,25 @@ internal class BlockWindow : Panel
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        // Attach events to both the label and the triangles
-        label.MouseLeave += HideTriangles;
-        upArrow.MouseEnter += ShowTriangles;
-        upArrow.MouseLeave += HideTriangles;
-        downArrow.MouseEnter += ShowTriangles;
-        downArrow.MouseLeave += HideTriangles;
+        // Attach events to both the label and the triangles/panels
+        commandLabel.MouseLeave += HideControls;
+        upArrow.MouseEnter += ShowControls;
+        upArrow.MouseLeave += HideControls;
+        downArrow.MouseEnter += ShowControls;
+        downArrow.MouseLeave += HideControls;
     }
 
-    private Panel CreateTriangleBox(bool isUp, Command command)
+    private NumericUpDown CreateNumericBox()
     {
-        var box = new Panel {
+        throw new NotImplementedException();
+    }
+
+    private Panel CreateTriangleBox(bool isUp)
+    {
+        Panel box = new Panel {
             Size = new Size(20, 10), // Small size for the triangle box
             BackColor = Color.Transparent, // Set transparent so only the triangle shows
             Visible = false, // Initially hidden
-            Tag = command // access to the command of the parent label
         };
 
         box.Paint += (sender, e) => {
