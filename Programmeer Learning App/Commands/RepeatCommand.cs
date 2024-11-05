@@ -4,11 +4,8 @@ namespace Programmeer_Learning_App.Commands;
 
 public class RepeatCommand : LoopCommand
 {
-    public override string Name => "Repeat";
-
     private readonly int _repeatCount;
     
-
     public RepeatCommand(int repeatCount, List<Command> commands)
     {
         _repeatCount = repeatCount;
@@ -38,7 +35,7 @@ public class RepeatCommand : LoopCommand
         => this.Commands.Add(cmd);
 
     public override string ToString() 
-        => $"RepeatCommand {_repeatCount}";
+        => $"Repeat {_repeatCount}";
 
     public override Command? FromString(string[] words)
     {

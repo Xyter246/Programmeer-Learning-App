@@ -4,7 +4,7 @@ namespace Programmeer_Learning_App.Commands;
 
 public abstract class Command
 {
-    public abstract string Name { get; } // name of the command
+    public virtual string Name => ToString().Split(' ')[0];
 
     /// <summary>
     /// Executes the corresponding command upon a Player instance

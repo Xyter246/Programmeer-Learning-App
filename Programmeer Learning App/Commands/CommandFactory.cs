@@ -3,9 +3,9 @@
 public static class CommandFactory
 {
     private static readonly Dictionary<string, Func<string[], Command?>> commandMap = new Dictionary<string, Func<string[], Command?>>() {
-        {"MoveCommand"  , (words) => new MoveCommand(0).FromString(words)},
-        {"TurnCommand"  , (words) => new TurnCommand(RelativeDir.Right).FromString(words)},
-        {"RepeatCommand", (words) => new RepeatCommand(0).FromString(words)}
+        {"Move"  , (words) => new MoveCommand(0).FromString(words)},
+        {"Turn"  , (words) => new TurnCommand(RelativeDir.Right).FromString(words)},
+        {"Repeat", (words) => new RepeatCommand(0).FromString(words)}
     };
 
     public static Command? CreateInstance(string[] words)
