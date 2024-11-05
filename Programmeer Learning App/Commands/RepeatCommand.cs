@@ -4,11 +4,11 @@ namespace Programmeer_Learning_App.Commands;
 
 public class RepeatCommand : LoopCommand
 {
-    private readonly int _repeatCount;
+    public int RepeatCount;
     
     public RepeatCommand(int repeatCount, List<Command> commands)
     {
-        _repeatCount = repeatCount;
+        RepeatCount = repeatCount;
         Commands = commands;
     }
 
@@ -16,7 +16,7 @@ public class RepeatCommand : LoopCommand
 
     public override void Execute(Player player)
     {
-        for (int i = 0; i < _repeatCount; i++)
+        for (int i = 0; i < RepeatCount; i++)
             ExecuteCycle(player);
         return;
 
@@ -26,16 +26,9 @@ public class RepeatCommand : LoopCommand
                 command.Execute(player);
         }
     }
-
-    /// <summary>
-    /// Adds an object to the end of the RepeatCommand.
-    /// </summary>
-    /// <param name="cmd">Command which is to be added.</param>
-    public void Add(Command cmd)
-        => this.Commands.Add(cmd);
-
+    
     public override string ToString() 
-        => $"Repeat {_repeatCount}";
+        => $"Repeat {RepeatCount}";
 
     public override Command? FromString(string[] words)
     {
