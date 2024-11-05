@@ -38,7 +38,7 @@ public class RepeatCommand : LoopCommand
         => this.Commands.Add(cmd);
 
     public override string ToString() 
-        => $"RepeatCommand {_repeatCount}";
+        => $"Repeat {_repeatCount}";
 
     public override Command? FromString(string[] words)
     {

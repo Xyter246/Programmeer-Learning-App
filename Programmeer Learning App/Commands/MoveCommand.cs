@@ -21,7 +21,7 @@ public class MoveCommand : Command
     }
 
     public override string ToString()
-        => $"MoveCommand {MoveAmount}";
+        => $"Move {MoveAmount}";
 
     public override Command? FromString(string[] words)
     {

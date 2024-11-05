@@ -16,7 +16,7 @@ public class TurnCommand : Command
         => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)_relativeDir) % Enum.GetNames(typeof(CardinalDir)).Length);
 
     public override string ToString()
-        => $"TurnCommand {_relativeDir}";
+        => $"Turn {_relativeDir}";
 
     public override Command? FromString(string[] words)
         => Enum.TryParse(words[1], out RelativeDir relDir) ? new TurnCommand(relDir) : null;
