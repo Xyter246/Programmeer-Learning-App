@@ -23,7 +23,7 @@ public class TXTFileWriter : IFileWriter
     /// <param name="sw">StreamWriter instance used to write to disc.</param>
     /// <param name="commands">List of Commands to be written to file.</param>
     /// <param name="indentCount">current indentation count.</param>
-    private static void WriteList(StreamWriter sw, LinkedList<Command> commands, int indentCount)
+    private static void WriteList(StreamWriter sw, List<Command> commands, int indentCount)
     {
         foreach (Command command in commands) {
             string indentation = "";

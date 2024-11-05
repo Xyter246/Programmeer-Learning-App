@@ -11,7 +11,7 @@ public static class Metric
     {
         return RecursiveRepeat(program.Commands, count: 0);
 
-        int RecursiveRepeat(LinkedList<Command> commands, int count)
+        int RecursiveRepeat(List<Command> commands, int count)
         {
             foreach (Command cmd in commands) {
                 count++;
@@ -31,7 +31,7 @@ public static class Metric
     {
         return RecursiveRepeat(program.Commands, currentDepth: 0);
 
-        int RecursiveRepeat(LinkedList<Command> commands, int currentDepth)
+        int RecursiveRepeat(List<Command> commands, int currentDepth)
         {
             int maxDepth = currentDepth;
             foreach (Command cmd in commands)
@@ -50,7 +50,7 @@ public static class Metric
     {
         return RecursiveRepeat(program.Commands, count: 0);
 
-        int RecursiveRepeat(LinkedList<Command> commands, int count)
+        int RecursiveRepeat(List<Command> commands, int count)
         {
             foreach (Command cmd in commands)
                 if (cmd is RepeatCommand rptcmd)
@@ -71,7 +71,8 @@ public static class Metric
         int minX = player.Pos.X, maxX = player.Pos.X;
         int minY = player.Pos.Y, maxY = player.Pos.Y;
 
-        while (!program.HasEnded) {
+        while (!program.HasEnded)
+        {
             program.StepOnce(player);
             minX = Math.Min(minX, player.Pos.X);
             minY = Math.Min(minY, player.Pos.Y);

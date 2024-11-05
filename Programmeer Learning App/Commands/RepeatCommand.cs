@@ -9,13 +9,13 @@ public class RepeatCommand : LoopCommand
     private readonly int _repeatCount;
     
 
-    public RepeatCommand(int repeatCount, LinkedList<Command> commands)
+    public RepeatCommand(int repeatCount, List<Command> commands)
     {
         _repeatCount = repeatCount;
         Commands = commands;
     }
 
-    public RepeatCommand(int repeatCount) : this(repeatCount, new LinkedList<Command>()) { }
+    public RepeatCommand(int repeatCount) : this(repeatCount, new List<Command>()) { }
 
     public override void Execute(Player player)
     {
@@ -35,7 +35,7 @@ public class RepeatCommand : LoopCommand
     /// </summary>
     /// <param name="cmd">Command which is to be added.</param>
     public void Add(Command cmd)
-        => this.Commands.AddLast(cmd);
+        => this.Commands.Add(cmd);
 
     public override string ToString() 
         => $"RepeatCommand {_repeatCount}";
