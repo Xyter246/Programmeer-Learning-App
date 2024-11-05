@@ -31,6 +31,6 @@ public class TopBar : Label
         }
 
         Point ButtonOffsetRight()
-            => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width), 0);
+            => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width) + _bufferSize.Width, (this.Height - _buttonSize.Height) / 2);
     }
 }
