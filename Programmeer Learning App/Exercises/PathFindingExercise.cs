@@ -43,5 +43,4 @@ public class PathFindingExercise : Exercise
         pfe.EndPoint = endPoint ?? throw new ArgumentException(@"There must be an EndPoint for an Exercise.");
         return pfe;
     }
-
 }

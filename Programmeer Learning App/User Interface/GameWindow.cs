@@ -5,7 +5,7 @@ namespace Programmeer_Learning_App.User_Interface;
 
 public class GameWindow : Form
 {
-    [STAThread] // Required for Importing and Exporting.
+    [STAThread] // Required for Importing and Exporting functionality.
     public static void Main(string[] args)
     {
         Console.WriteLine(@"Starting up...");

@@ -1,7 +1,7 @@
 ﻿namespace Programmeer_Learning_App.Commands;
 public abstract class LoopCommand : Command
 {
-   public List<Command> Commands = new List<Command>();
+   public LinkedList<Command> Commands = new LinkedList<Command>();
 
    /// <summary>
    /// Convert this Command to a String. Does not include sub-commands if it has any.
