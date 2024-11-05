@@ -14,15 +14,15 @@ public class TXTFileReader : IFileReader
             return null;
 
         StreamReader sr = new StreamReader(ofd.FileName);
-        (List<Command> commands, _) = Readlist(sr, 0);
+        (LinkedList<Command> commands, _) = Readlist(sr, 0);
         
         sr.Close();
         return new Program(commands);
     }
 
-    private static (List<Command>, string?) Readlist(StreamReader sr, int currentIndent)
+    private static (LinkedList<Command>, string?) Readlist(StreamReader sr, int currentIndent)
     {
-        List<Command> commands = new List<Command>();
+        LinkedList<Command> commands = new LinkedList<Command>();
         string? line = sr.ReadLine();
         while (line is not null) {
             // Instantiate the String as a Command.
@@ -36,7 +36,7 @@ public class TXTFileReader : IFileReader
             // if the new Command is less indented than the current Command, go back once.
             if (indent < currentIndent)
                 return (commands, line);
-            commands.Add(cmd);
+            commands.AddLast(cmd);
 
             // if this is a LoopCommand, add new Commands as part of this Command.
             if (cmd is LoopCommand lpcmd) {

@@ -4,9 +4,7 @@ public class TopBar : Label
 {
     private readonly Size _bufferSize = new Size(5, 25);
     private readonly Size _buttonSize = new Size(60, 25);
-    private Button _runButton;
-    private Button _exportButton;
-    private Button _importButton;
+    private int _buttonCount = 0;
 
     public TopBar(GameWindow gameWindow)
     {
@@ -14,48 +12,25 @@ public class TopBar : Label
         this.Height = 30;
         this.Dock = DockStyle.Top;
 
-        MakeRunButton();
-        MakeExportButton();
-        MakeImportButton();
+        makeButton(@"RUN", gameWindow.runButton_Click);
+        makeButton(@"EXPORT", gameWindow.exportButton_Click);
+        makeButton(@"IMPORT", gameWindow.importButton_Click);
         return;
 
-        void MakeRunButton()
+        Button makeButton(string buttonName, EventHandler eh)
         {
-            _runButton = new Button();
-            _runButton.FlatStyle = FlatStyle.Flat;
-            _runButton.BackColor = Color.Gray;
-            _runButton.Text = @"RUN";
-            _runButton.Size = _buttonSize;
-            _runButton.Location = ButtonOffsetRight(new Button() { Location = new Point(0, 3), Size = new Size(0, 0)});
-            _runButton.Click += gameWindow.runButton_Click;
-            this.Controls.Add(_runButton);
+            Button button = new Button();
+            button.FlatStyle = FlatStyle.Flat;
+            button.BackColor = Color.Gray;
+            button.Text = buttonName;
+            button.Size = _buttonSize;
+            button.Location = ButtonOffsetRight();
+            button.Click += eh;
+            this.Controls.Add(button);
+            return button;
         }
 
-        void MakeExportButton()
-        {
-            _exportButton = new Button();
-            _exportButton.FlatStyle = FlatStyle.Flat;
-            _exportButton.BackColor = Color.Gray;
-            _exportButton.Text = @"EXPORT";
-            _exportButton.Size = _buttonSize;
-            _exportButton.Location = ButtonOffsetRight(_runButton!);
-            _exportButton.Click += gameWindow.exportButton_Click;
-            this.Controls.Add(_exportButton);
-        }
-
-        void MakeImportButton()
-        {
-            _importButton = new Button();
-            _importButton.FlatStyle = FlatStyle.Flat;
-            _importButton.BackColor = Color.Gray;
-            _importButton.Text = @"IMPORT";
-            _importButton.Size = _buttonSize;
-            _importButton.Location = ButtonOffsetRight(_exportButton!);
-            _importButton.Click += gameWindow.importButton_Click;
-            this.Controls.Add(_importButton);
-        }
+        Point ButtonOffsetRight()
+            => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width), 0);
     }
-
-    private Point ButtonOffsetRight(Button btn) 
-        => btn.Location with { X = btn.Location.X + btn.Size.Width + _bufferSize.Width };
 }

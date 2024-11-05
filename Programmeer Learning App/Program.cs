@@ -2,16 +2,17 @@
 
 public class Program
 {
-    public List<Command> Commands;
-    public bool HasEnded => _currentIndex >= this.Commands.Count;
-    private int _currentIndex;
+    public LinkedList<Command> Commands;
+    public bool HasEnded = false;
+    private LinkedListNode<Command> _currentNode;
 
-    public Program(List<Command> commands)
+    public Program(LinkedList<Command> commands)
     {
         Commands = commands;
+        _currentNode = Commands.First;
     }
 
-    public Program() : this (new List<Command>()) { }
+    public Program() : this (new LinkedList<Command>()) { }
 
     /// <summary>
     /// Executes one command of the Program on the given player.
@@ -19,8 +20,12 @@ public class Program
     /// <param name="player">The Player instance which gets updated.</param>
     public void StepOnce(Player player)
     {
-        if (!HasEnded)
-            Commands[_currentIndex++].Execute(player);
+        if (_currentNode.Next is null)
+            if (Commands.First is null)
+                return;
+            else _currentNode = Commands.First;
+        _currentNode = _currentNode.Next;
+        _currentNode.Value.Execute(player);
     }
 
     /// <summary>
@@ -29,9 +34,9 @@ public class Program
     /// </summary>
     public void ResetProgram()
     {
-        _currentIndex = 0;
+        _currentNode = Commands.First;
     }
 
     public void Add(Command command)
-        => Commands.Add(command);
+        => Commands.AddLast(command);
 }
