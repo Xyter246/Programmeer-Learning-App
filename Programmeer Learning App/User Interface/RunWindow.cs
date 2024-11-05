@@ -1,11 +1,13 @@
-﻿namespace Programmeer_Learning_App.User_Interface
+﻿using Xunit.Sdk;
+
+namespace Programmeer_Learning_App.User_Interface
 {
     internal class RunWindow : Panel
     {
-        private readonly Size _gridSize;
-        public RunWindow(Size gridSize)
+        private Program _program;
+        public RunWindow(Program program)
         {
-            _gridSize = gridSize;
+            _program = program;
 
             this.Paint += DrawWorld;
         }
@@ -14,10 +16,11 @@
         {
             Brush boxColor;
             Graphics gr = pea.Graphics;
-            Size BoxSize = new Size(Width / _gridSize.Width, Height / _gridSize.Height);
+            Size gridSize = _program.MaxGridSize(Player.Empty).Item2;
+            Size BoxSize = new Size(Width / gridSize.Width, Height / gridSize.Height);
 
-            for (int x = 0; x < _gridSize.Width; x++) {
-                for (int y = 0; y < _gridSize.Height; y++) {
+            for (int x = 0; x < gridSize.Width; x++) {
+                for (int y = 0; y < gridSize.Height; y++) {
                     if ((x + y) % 2 == 0) boxColor = Brushes.Green;
                     else boxColor = Brushes.GreenYellow;
                     gr.FillRectangle(boxColor, x * BoxSize.Width, y * BoxSize.Height, BoxSize.Width, BoxSize.Height);

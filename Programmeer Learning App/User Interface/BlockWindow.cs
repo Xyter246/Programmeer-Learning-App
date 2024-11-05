@@ -144,7 +144,7 @@ internal class BlockWindow : Panel
         {
             // Small delay to ensure smoothness
             isHovering = false;
-            Task.Delay(100).ContinueWith(_ =>
+            Task.Delay(1).ContinueWith(_ =>
             {
                 if (!isHovering) {
                     upArrow.Visible = false;
@@ -222,5 +222,5 @@ internal class BlockWindow : Panel
     /// </summary>
     /// <returns>A new Program instance with the current Label Commands.</returns>
     public Program Program() 
-        => new Program(_commandList.ToList());
+        => new Program(_commandList);
 }
