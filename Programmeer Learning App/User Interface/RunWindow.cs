@@ -2,7 +2,7 @@
 
 namespace Programmeer_Learning_App.User_Interface
 {
-    internal class RunWindow : Panel
+    public class RunWindow : Panel
     {
         private Program _program;
         public RunWindow(Program program)

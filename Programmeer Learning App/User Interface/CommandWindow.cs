@@ -1,8 +1,11 @@
 ﻿namespace Programmeer_Learning_App.User_Interface;
 
-internal class CommandWindow : Panel
+// This classes layout had been hand made, methods return types, parameters etc. 
+// After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
+// After that we changed the code again to fit our vision of the class
+
+public class CommandWindow : Panel
 {   
-    // Class written by AI
     private readonly Panel _buttonPanel;
     private readonly Button _moveCmdButton;
     private readonly Button _repeatCmdButton;
