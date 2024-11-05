@@ -3,7 +3,7 @@
 internal class BlockWindow : Panel
 {
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
-    private readonly LinkedList<Command> _commandList; // Linked list to track command labels
+    private readonly List<Command> _commandList; // List to track command labels
     private Point _labelLocation; // Tracks where to add the next label
     private bool isHovering; // Tracks if the mouse is inside the label or triangles
 
@@ -20,61 +20,45 @@ internal class BlockWindow : Panel
         };
         this.Controls.Add(_blockPanel); // Add the inner panel to BlockWindow
 
-        // Initialize the linked list for command labels
-        _commandList = new LinkedList<Command>();
+        // Initialize the list for command labels
+        _commandList = new List<Command>();
         _labelLocation = new Point(10, 10); // Starting position for labels
     }
 
     // Method to add a new command label to the panel
     public void AddCommand(Command command)
     {
-        _commandList.AddLast(command);
+        _commandList.Add(command);
         UpdateScreen(_commandList);
     }
 
-    // Optional: Method to remove a command label by command name
+    // Method to remove a command label by command reference
     public void RemoveCommand(Command command)
     {
-        LinkedListNode<Command>? node = _commandList.Find(command);
-        if (node != null) {
-            _commandList.Remove(node!);
+        if (_commandList.Remove(command)) {
             UpdateScreen(_commandList); // Refresh the display
         }
     }
 
-    // Helper method to re-align labels after a removal
+    // Method to re-align labels after moving a command up or down
     private void UpdatePositions(Command command, bool moveUp)
     {
-        // Find the node containing the command
-        LinkedListNode<Command>? node = _commandList.Find(command);
-        if (node == null)
-            return; // Command not found in the list
+        int index = _commandList.IndexOf(command);
+        if (index == -1) return; // Command not found in the list
 
-        // Move up
-        if (moveUp) {
-            LinkedListNode<Command>? previousNode = node.Previous;
-            if (previousNode != null) {
-                // Remove the node and reinsert it before the previous node
-                _commandList.Remove(node!);
-                _commandList.AddBefore(previousNode!, node!);
-            }
-        }
-        // Move down
-        else {
-            LinkedListNode<Command>? nextNode = node.Next;
-            if (nextNode != null) {
-                // Remove the node and reinsert it after the next node
-                _commandList.Remove(node!);
-                _commandList.AddAfter(nextNode!, node!);
-            }
+        if (moveUp && index > 0) {
+            // Swap command with the previous one to move it up
+            (_commandList[index], _commandList[index - 1]) = (_commandList[index - 1], _commandList[index]);
+        } else if (!moveUp && index < _commandList.Count - 1) {
+            // Swap command with the next one to move it down
+            (_commandList[index], _commandList[index + 1]) = (_commandList[index + 1], _commandList[index]);
         }
 
         // Update the panel display to reflect the new order
         UpdateScreen(_commandList);
     }
 
-
-    private void UpdateScreen(LinkedList<Command> commandList)
+    private void UpdateScreen(List<Command> commandList)
     {
         _blockPanel.Controls.Clear();
         _labelLocation = new Point(10, 10);
@@ -112,16 +96,16 @@ internal class BlockWindow : Panel
         Panel upArrow = CreateTriangleBox(true, command);
         Panel downArrow = CreateTriangleBox(false, command);
 
-        // Find command associated with panel and move it up in the linkedlist
+        // Move the command up in the list
         upArrow.Click += (sender, e) => {
-            if (sender is Panel panel && panel.Tag is Command command)
-                UpdatePositions(command, true); 
+            if (sender is Panel panel && panel.Tag is Command cmd)
+                UpdatePositions(cmd, true);
         };
 
-        // Find command associated with label and move it down in the linkedlist
+        // Move the command down in the list
         downArrow.Click += (sender, e) => {
-            if (sender is Panel panel && panel.Tag is Command command)
-                UpdatePositions(command, false);
+            if (sender is Panel panel && panel.Tag is Command cmd)
+                UpdatePositions(cmd, false);
         };
 
         // Add the boxes to the label's parent container so they overlay correctly
@@ -142,10 +126,8 @@ internal class BlockWindow : Panel
 
         void HideTriangles(object? sender, EventArgs e)
         {
-            // Small delay to ensure smoothness
             isHovering = false;
-            Task.Delay(1).ContinueWith(_ =>
-            {
+            Task.Delay(1).ContinueWith(_ => {
                 if (!isHovering) {
                     upArrow.Visible = false;
                     downArrow.Visible = false;
@@ -161,7 +143,6 @@ internal class BlockWindow : Panel
         downArrow.MouseLeave += HideTriangles;
     }
 
-    // Method to create the triangle boxes with up or down triangles
     private Panel CreateTriangleBox(bool isUp, Command command)
     {
         var box = new Panel {
@@ -171,24 +152,22 @@ internal class BlockWindow : Panel
             Tag = command // access to the command of the parent label
         };
 
-        // Draw the triangle based on whether it's up or down
-        box.Paint += (sender, e) =>
-        {
+        box.Paint += (sender, e) => {
             Point[] trianglePoints;
             if (isUp) {
                 trianglePoints = new[]
                 {
-                new Point(box.Width / 2, 0),       // Top middle point
-                new Point(0, box.Height),          // Bottom-left point
-                new Point(box.Width, box.Height)   // Bottom-right point
-            };
+                    new Point(box.Width / 2, 0),
+                    new Point(0, box.Height),
+                    new Point(box.Width, box.Height)
+                };
             } else {
                 trianglePoints = new[]
                 {
-                new Point(0, 0),                  // Top-left point
-                new Point(box.Width, 0),          // Top-right point
-                new Point(box.Width / 2, box.Height) // Bottom middle point
-            };
+                    new Point(0, 0),
+                    new Point(box.Width, 0),
+                    new Point(box.Width / 2, box.Height)
+                };
             }
 
             e.Graphics.FillPolygon(Brushes.Black, trianglePoints);
@@ -197,7 +176,6 @@ internal class BlockWindow : Panel
         return box;
     }
 
-    // Method to position the up and down boxes on the label
     private void PositionBoxes(Label label, Panel upBox, Panel downBox)
     {
         int centerX = (label.Width - upBox.Width) / 2;
@@ -208,7 +186,6 @@ internal class BlockWindow : Panel
         downBox.Location = new Point(centerX, bottomY);
     }
 
-    // Resize handler to adjust BlockWindow size and location based on GameWindow
     public void OnResize(object? o, EventArgs? ea, int cmdWindowWidth)
     {
         if (o is not GameWindow gamewindow) return;
@@ -217,10 +194,5 @@ internal class BlockWindow : Panel
         this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
     }
 
-    /// <summary>
-    /// Converts the Command Labels of the BlockWindow to a useable Program instance.
-    /// </summary>
-    /// <returns>A new Program instance with the current Label Commands.</returns>
-    public Program Program() 
-        => new Program(_commandList);
+    public Program Program() => new Program(_commandList);
 }
