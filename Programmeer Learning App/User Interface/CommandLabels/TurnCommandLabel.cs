@@ -5,6 +5,7 @@ public class TurnCommandLabel : CommandLabel
     private readonly ComboBox _cbb = new ComboBox()
     {
         DataSource = new RelativeDir[] {RelativeDir.Right , RelativeDir.Left},
+        SelectedIndex = 0,
     };
 
     public override Command ConvertLabel()

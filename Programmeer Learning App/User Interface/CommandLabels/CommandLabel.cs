@@ -2,11 +2,13 @@
 
 public abstract class CommandLabel : Label
 {
-    public new readonly string Name;
+    public new string Name => ConvertLabel().Name;
 
     public CommandLabel()
     {
-        Name = ConvertLabel().Name;
+        this.Text = Name;
+        this.Size = new Size(80, 30);
+        this.BackColor = Color.White;
     }
 
     public abstract Command ConvertLabel();

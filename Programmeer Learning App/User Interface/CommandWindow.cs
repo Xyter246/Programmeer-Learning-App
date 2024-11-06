@@ -34,7 +34,7 @@ public class CommandWindow : Panel
         Point buttonLocation = new Point(10, 10);
         _moveCmdButton = InitializeButton(new MoveCommandLabel());
         _repeatCmdButton = InitializeButton(new RepeatCommandLabel());
-        _turnCmdButton = InitializeButton(new TurnCommandLabel());
+        // _turnCmdButton = InitializeButton(new TurnCommandLabel());
 
         // Method to initialize and position buttons
         Button InitializeButton(CommandLabel cmd)
@@ -66,6 +66,16 @@ public class CommandWindow : Panel
     {
         if (o is not Button button) return;
 
-        _blockWindow.AddCommand((CommandLabel)button.Tag!); // We can cast because all buttons are made in the same InitializeButton method
+        switch(button.Tag!) {
+            case MoveCommandLabel moveCmdLabel:
+                _blockWindow.AddCommand(new MoveCommandLabel());
+                break;
+            case RepeatCommandLabel repeatCmdLabel:
+                _blockWindow.AddCommand(new RepeatCommandLabel());
+                break;
+            default: return;
+        }
+
+        // _blockWindow.AddCommand((CommandLabel)button.Tag!); // We can cast because all buttons are made in the same InitializeButton method
     }
 }

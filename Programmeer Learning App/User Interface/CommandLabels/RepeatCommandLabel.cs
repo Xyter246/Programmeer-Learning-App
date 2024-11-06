@@ -6,6 +6,7 @@ public class RepeatCommandLabel : LoopCommandLabel
         Increment = 1,
         Minimum = 1,
         Maximum = int.MaxValue,
+        Value = 1
     };
 
     public override Command ConvertLabel() 

@@ -6,9 +6,13 @@ public class MoveCommandLabel : CommandLabel
         Increment = 1,
         Minimum = 1,
         Maximum = int.MaxValue,
+        Value = 1
     };
 
-    public MoveCommandLabel() : base() { }
+    public MoveCommandLabel() : base()
+    {
+        this.Text = Name;
+    }
 
     public override Command ConvertLabel()
         => new MoveCommand((int)_nup.Value);

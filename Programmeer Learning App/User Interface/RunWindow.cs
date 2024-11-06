@@ -1,4 +1,5 @@
-﻿using Xunit.Sdk;
+﻿using Programmeer_Learning_App.Exercises;
+using Xunit.Sdk;
 
 namespace Programmeer_Learning_App.User_Interface
 {
