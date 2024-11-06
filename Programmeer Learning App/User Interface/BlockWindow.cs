@@ -6,7 +6,7 @@
 public class BlockWindow : Panel
 {
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
-    private readonly List<Command> _commandList; // List to track command labels
+    private readonly List<CommandLabel> _commandList; // List to track command labels
     private Point _labelLocation; // Tracks where to add the next label
     private bool isHovering; // Tracks if the mouse is inside the label or triangles
 
@@ -24,21 +24,21 @@ public class BlockWindow : Panel
         this.Controls.Add(_blockPanel); // Add the inner panel to BlockWindow
 
         // Initialize the list for command labels
-        _commandList = new List<Command>();
+        _commandList = new List<CommandLabel>();
         _labelLocation = new Point(10, 10); // Starting position for labels
     }
 
     // Method to add a new command label to the panel
-    public void AddCommand(Command command)
+    public void AddCommand(CommandLabel cmdLabel)
     {
-        _commandList.Add(command);
+        _commandList.Add(cmdLabel);
         UpdateScreen(_commandList);
     }
 
     // Method to remove a command label by command reference
-    public void RemoveCommand(Command command)
+    public void RemoveCommand(CommandLabel cmdLabel)
     {
-        if (_commandList.Remove(command)) {
+        if (_commandList.Remove(cmdLabel)) {
             UpdateScreen(_commandList); // Refresh the display
         }
     }
@@ -46,19 +46,7 @@ public class BlockWindow : Panel
     // Method to re-align labels after moving a command up or down
     private void UpdatePositions(Command command, bool moveUp)
     {
-        int index = _commandList.IndexOf(command);
-        if (index == -1) return; // Command not found in the list
-
-        if (moveUp && index > 0) {
-            // Swap command with the previous one to move it up
-            (_commandList[index], _commandList[index - 1]) = (_commandList[index - 1], _commandList[index]);
-        } else if (!moveUp && index < _commandList.Count - 1) {
-            // Swap command with the next one to move it down
-            (_commandList[index], _commandList[index + 1]) = (_commandList[index + 1], _commandList[index]);
-        }
-
-        // Update the panel display to reflect the new order
-        UpdateScreen(_commandList);
+        throw new NotImplementedException();
     }
 
     private void ChangeCount(Command command, int amount)
@@ -66,29 +54,9 @@ public class BlockWindow : Panel
         throw new NotImplementedException();
     }
 
-    private void UpdateScreen(List<Command> commandList)
+    private void UpdateScreen(List<CommandLabel> commandList)
     {
-        _blockPanel.Controls.Clear();
-        _labelLocation = new Point(10, 10);
-
-        foreach (Command command in commandList) {
-            Label commandLabel = new Label {
-                Text = command.Name,
-                Size = new Size(80, 30),
-                Location = _labelLocation,
-                BackColor = Color.LightGray,
-                Padding = new Padding(5),
-                BorderStyle = BorderStyle.FixedSingle,
-                Tag = command // Store the command in the label’s Tag property
-            };
-
-            // Add click event handler to the label
-            commandLabel.Click += CommandLabel_Click;
-            commandLabel.MouseEnter += OnHover;
-
-            _blockPanel.Controls.Add(commandLabel);
-            _labelLocation.Y += commandLabel.Height + 10;
-        }
+        throw new NotImplementedException();
     }
 
     private void CommandLabel_Click(object? o, EventArgs ea)
@@ -98,59 +66,7 @@ public class BlockWindow : Panel
 
     private void OnHover(object? o, EventArgs ea)
     {
-        if (o is not Label commandLabel || commandLabel.Tag is not Command command) return;
-
-        // Create the panels for the up and down triangles
-        Panel upArrow = CreateTriangleBox(true);
-        Panel downArrow = CreateTriangleBox(false);
-        
-
-        // Move the command up in the list
-        upArrow.Click += (sender, e) => {
-            if (sender is Panel panel && panel.Parent!.Tag is Command cmd)
-                UpdatePositions(cmd, true);
-        };
-
-        // Move the command down in the list
-        downArrow.Click += (sender, e) => {
-            if (sender is Panel panel && panel.Parent!.Tag is Command cmd)
-                UpdatePositions(cmd, false);
-        };
-
-        // Add the boxes to the label's parent container so they overlay correctly
-        commandLabel.Controls.Add(upArrow);
-        commandLabel.Controls.Add(downArrow);
-
-        // Position the boxes on the label
-        PositionBoxes(commandLabel, upArrow, downArrow);
-
-        ShowControls(o, ea);
-
-        void ShowControls(object? sender, EventArgs e)
-        {
-            isHovering = true;
-            upArrow.Visible = true;
-            downArrow.Visible = true;
-        }
-
-        void HideControls(object? sender, EventArgs e)
-        {
-            isHovering = false;
-            Task.Delay(1).ContinueWith(_ =>
-            {
-                if (!isHovering) {
-                    upArrow.Visible = false;
-                    downArrow.Visible = false;
-                }
-            }, TaskScheduler.FromCurrentSynchronizationContext());
-        }
-
-        // Attach events to both the label and the triangles/panels
-        commandLabel.MouseLeave += HideControls;
-        upArrow.MouseEnter += ShowControls;
-        upArrow.MouseLeave += HideControls;
-        downArrow.MouseEnter += ShowControls;
-        downArrow.MouseLeave += HideControls;
+        throw new NotImplementedException();
     }
 
     private NumericUpDown CreateNumericBox()
@@ -208,5 +124,5 @@ public class BlockWindow : Panel
         this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
     }
 
-    public Program Program() => new Program(_commandList);
+    public Program Program() => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
 }

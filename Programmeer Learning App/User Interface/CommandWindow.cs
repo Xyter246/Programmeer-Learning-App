@@ -1,11 +1,13 @@
-﻿namespace Programmeer_Learning_App.User_Interface;
+﻿using Programmeer_Learning_App.User_Interface.CommandLabels;
+
+namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
 // After that we changed the code again to fit our vision of the class
 
 public class CommandWindow : Panel
-{   
+{
     private readonly Panel _buttonPanel;
     private readonly Button _moveCmdButton;
     private readonly Button _repeatCmdButton;
@@ -30,19 +32,20 @@ public class CommandWindow : Panel
 
         // Initialize buttons and add them to _buttonPanel
         Point buttonLocation = new Point(10, 10);
-        _moveCmdButton = InitializeButton("Move");
-        _repeatCmdButton = InitializeButton("Repeat");
-        _turnCmdButton = InitializeButton("Turn");
+        _moveCmdButton = InitializeButton(new MoveCommandLabel());
+        _repeatCmdButton = InitializeButton(new RepeatCommandLabel());
+        _turnCmdButton = InitializeButton(new TurnCommandLabel());
 
         // Method to initialize and position buttons
-        Button InitializeButton(string name)
+        Button InitializeButton(CommandLabel cmd)
         {
             Button button = new Button();
             button.BackColor = Color.AliceBlue;
-            button.Text = name;
+            button.Text = cmd.Name;
             button.FlatStyle = FlatStyle.Flat;
             button.Location = buttonLocation;
             button.Click += ButtonClicked;
+            button.Tag = cmd;
 
             // Update button location for next button
             buttonLocation = new Point(buttonLocation.X, buttonLocation.Y + button.Height + 10);
@@ -63,18 +66,6 @@ public class CommandWindow : Panel
     {
         if (o is not Button button) return;
 
-        switch (button.Text) {
-            case "Move":
-                _blockWindow.AddCommand(new Commands.MoveCommand(1));
-                break;
-            case "Repeat":
-                _blockWindow.AddCommand(new Commands.RepeatCommand(1));
-                break;
-            case "Turn":
-                _blockWindow.AddCommand(new Commands.TurnCommand(Enums.RelativeDir.Left));
-                break;
-            default:
-                return;
-        }
+        _blockWindow.AddCommand((CommandLabel)button.Tag!); // We can cast because all buttons are made in the same InitializeButton method
     }
 }
