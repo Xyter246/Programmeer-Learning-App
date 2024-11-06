@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App.User_Interface;
+﻿using Programmeer_Learning_App.Exercises;
+
+namespace Programmeer_Learning_App.User_Interface;
 
 public class TopBar : Label
 {
@@ -16,6 +18,7 @@ public class TopBar : Label
         makeButton(@"RESET", gameWindow.resetButton_Click);
         makeButton(@"EXPORT", gameWindow.exportButton_Click);
         makeButton(@"IMPORT", gameWindow.importButton_Click);
+        makeButton(@"LEARN", gameWindow.exerciseButton_Click);
         return;
 
         Button makeButton(string buttonName, EventHandler eh)
@@ -34,9 +37,4 @@ public class TopBar : Label
         Point ButtonOffsetRight()
             => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width) + _bufferSize.Width, (this.Height - _buttonSize.Height) / 2);
     }
-
-    //public Exercise GetExercise()
-    //{
-    //    return new PathFindingExercise();
-    //}
 }

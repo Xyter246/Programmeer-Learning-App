@@ -3,6 +3,7 @@
 public class TurnCommand : Command
 {
     public RelativeDir TurnDir;
+    private const int _overflowProtection = 4;
 
     public TurnCommand(RelativeDir turnDir)
     {
@@ -10,7 +11,7 @@ public class TurnCommand : Command
     }
 
     public override void Execute(Player player)
-        => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)TurnDir + 4) % Enum.GetNames(typeof(CardinalDir)).Length);
+        => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)TurnDir + _overflowProtection) % Enum.GetNames(typeof(CardinalDir)).Length);
 
     public override string ToString()
         => $"Turn {TurnDir}";

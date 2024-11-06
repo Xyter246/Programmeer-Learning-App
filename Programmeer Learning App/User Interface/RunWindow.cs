@@ -1,9 +1,11 @@
 ﻿using Programmeer_Learning_App.Exercises;
 
 namespace Programmeer_Learning_App.User_Interface;
+
 public class RunWindow : Panel
 {
     public bool RunHasFinished = true;
+    private bool _forceStop = true;
     private const int _programStepDelay = 200; // in milliseconds
     private readonly Exercise? _exercise;
     private Player _player;
@@ -30,16 +32,7 @@ public class RunWindow : Panel
     private void DrawPathExercise(object? o, PaintEventArgs pea)
     {
         PathFindingExercise pfe = (PathFindingExercise)_exercise!;
-        //Graphics gr = pea.Graphics;
-        //Size gridSize = _exercise!.GridSize;
-        //Size BoxSize = new Size(Width / gridSize.Width, Height / gridSize.Height);
-
-        //for (int x = 0; x < gridSize.Width; x++)
-        //    for (int y = 0; y < gridSize.Height; y++) {
-        //        Brush boxColor = (x + y) % 2 == 0 ? Brushes.Green : Brushes.GreenYellow;
-        //        gr.FillRectangle(boxColor, x * BoxSize.Width, y * BoxSize.Height, BoxSize.Width, BoxSize.Height);
-        //        gr.DrawRectangle(Pens.Black, x * BoxSize.Width, y * BoxSize.Height, BoxSize.Width - BoxSize.Width / 100, BoxSize.Height - BoxSize.Height / 100);
-        //    }
+        DrawWorld(o, pea);
     }
 
     private void DrawWorld(object? o, PaintEventArgs pea)
@@ -107,8 +100,13 @@ public class RunWindow : Panel
     public async void Run(Program program)
     {
         ResetRun();
+        _forceStop = false;
         while (!program.HasEnded) {
             await Task.Delay(_programStepDelay);
+            if (_forceStop) {
+                this.Invalidate();
+                break;
+            }
             program.StepOnce(_player);
             this.Invalidate();
         }
@@ -118,6 +116,7 @@ public class RunWindow : Panel
     public void ResetRun()
     {
         _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
+        _forceStop = true;
         this.Invalidate();
     }
 }

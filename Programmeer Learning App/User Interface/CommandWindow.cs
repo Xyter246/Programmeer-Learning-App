@@ -9,9 +9,6 @@ namespace Programmeer_Learning_App.User_Interface;
 public class CommandWindow : Panel
 {
     private readonly Panel _buttonPanel;
-    private readonly Button _moveCmdButton;
-    private readonly Button _repeatCmdButton;
-    private readonly Button _turnCmdButton;
     private readonly BlockWindow _blockWindow;
 
     public CommandWindow(BlockWindow blockWindow)
@@ -32,9 +29,9 @@ public class CommandWindow : Panel
 
         // Initialize buttons and add them to _buttonPanel
         Point buttonLocation = new Point(10, 10);
-        _moveCmdButton = InitializeButton(new MoveCommandLabel());
-        _repeatCmdButton = InitializeButton(new RepeatCommandLabel());
-        _turnCmdButton = InitializeButton(new TurnCommandLabel());
+        InitializeButton(new MoveCommandLabel());   // MoveButton
+        InitializeButton(new RepeatCommandLabel()); // RepeatButton
+        InitializeButton(new TurnCommandLabel());   // TurnButton
         return;
 
         // Method to initialize and position buttons

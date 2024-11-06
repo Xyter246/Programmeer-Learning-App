@@ -1,4 +1,5 @@
-﻿using Programmeer_Learning_App.Exporting;
+﻿using Programmeer_Learning_App.Exercises;
+using Programmeer_Learning_App.Exporting;
 using Programmeer_Learning_App.Importing;
 
 namespace Programmeer_Learning_App.User_Interface;
@@ -84,4 +85,19 @@ public class GameWindow : Form
     public void importButton_Click(object? o, EventArgs ea)
         // Returns an Program instance, but is unused as this function's return type is void.
         => _blockWindow.AddProgram(TXTFileReader.Readfile());
+
+    public void exerciseButton_Click(object? o, EventArgs ea)
+    {
+        OpenFileDialog ofd = new OpenFileDialog();
+        ofd.Filter = @"Text Documents (*.txt)|*.txt|All files (*.*)|*.*";
+        if (ofd.ShowDialog() != DialogResult.OK || ofd.FileName == string.Empty)
+            return;
+
+        StreamReader sr = new StreamReader(ofd.FileName);
+        List<string> lines = new List<string>();
+        while (!sr.EndOfStream)
+            lines.Add(sr.ReadLine()!);
+
+        PathFindingExercise.Generate(lines.ToArray());
+    }
 }
