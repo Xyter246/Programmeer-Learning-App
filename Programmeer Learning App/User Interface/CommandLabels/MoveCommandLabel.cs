@@ -14,6 +14,11 @@ public class MoveCommandLabel : CommandLabel
         this.Controls.Add(_nup);
     }
 
+    public MoveCommandLabel(int value) : this()
+    {
+        _nup.Value = value;
+    }
+
     public override Command ConvertLabel()
         => new MoveCommand((int)_nup.Value);
 

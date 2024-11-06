@@ -14,6 +14,13 @@ public class RepeatCommandLabel : LoopCommandLabel
         this.Controls.Add(_nup);
     }
 
+    public RepeatCommandLabel(int repeatCount, List<Command> commands) : this()
+    {
+        _nup.Value = repeatCount;
+        foreach (Command command in commands)
+            CommandLabels.Add(command.ToLabel());
+    }
+
     public override Command ConvertLabel() 
         => new RepeatCommand((int)_nup.Value, CommandLabels.Select(cmdl => cmdl.ConvertLabel()).ToList());
 

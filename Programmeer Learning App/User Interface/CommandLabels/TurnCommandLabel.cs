@@ -13,6 +13,11 @@ public class TurnCommandLabel : CommandLabel
         this.Controls.Add(_cbb);
     }
 
+    public TurnCommandLabel(RelativeDir relDir) : this()
+    {
+        _cbb.SelectedItem = relDir;
+    }
+
     public override Command ConvertLabel()
         => new TurnCommand((RelativeDir)_cbb.SelectedValue!);
 

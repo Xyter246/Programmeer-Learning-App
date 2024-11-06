@@ -6,7 +6,7 @@ public class TXTFileReader : IFileReader
     /// Creates a Program instance from a Saved Text Document on the User's device.
     /// </summary>
     /// <returns>A Program instance, or Null if no valid file was found.</returns>
-    public static Program? Readfile()
+    public static List<CommandLabel>? Readfile()
     {
         OpenFileDialog ofd = new OpenFileDialog();
         ofd.Filter = @"Text Documents (*.txt)|*.txt|All files (*.*)|*.*";
@@ -14,10 +14,11 @@ public class TXTFileReader : IFileReader
             return null;
 
         StreamReader sr = new StreamReader(ofd.FileName);
+
         (List<Command> commands, _) = Readlist(sr, 0);
         
         sr.Close();
-        return new Program(commands);
+        return commands.Select(c => c.ToLabel()).ToList();
     }
 
     private static (List<Command>, string?) Readlist(StreamReader sr, int currentIndent)

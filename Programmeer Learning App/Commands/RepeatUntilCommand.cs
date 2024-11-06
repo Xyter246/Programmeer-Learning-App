@@ -28,4 +28,9 @@ public class RepeatUntilCommand : LoopCommand
         return null;
         //}
     }
+
+    public override CommandLabel ToLabel()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -12,7 +12,7 @@ namespace Programmeer_Learning_App.User_Interface;
 public class BlockWindow : Panel
 {
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
-    private readonly List<CommandLabel> _commandList; // List to track command labels
+    private List<CommandLabel> _commandList; // List to track command labels
     private bool isHovering; // Tracks if the mouse is inside the label or triangles
 
     public BlockWindow()
@@ -53,16 +53,17 @@ public class BlockWindow : Panel
 
         if (FindCommand(_commandList, cmdLabel, moveUp)) {
             // If cmdLabel is moved out of a loop list and needs to move outside the parent, position it in the main list
-            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel && ((LoopCommandLabel)cl).CommandLabels.Contains(cmdLabel));
-            if (moveUp && parentIndex != -1) {
+            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel label && label.CommandLabels.Contains(cmdLabel));
+            if (parentIndex == -1) return;
+            if (moveUp) {
                 _commandList.Insert(parentIndex, cmdLabel); // Insert it above the parent loop
-            } else if (!moveUp && parentIndex != -1) {
+            } else {
                 _commandList.Insert(parentIndex + 1, cmdLabel); // Insert it below the parent loop
             }
         }
 
         // Refresh display after reordering
-        UpdateScreen(_commandList);
+        UpdateScreen();
     }
 
     private bool FindCommand(List<CommandLabel> commandLabels, CommandLabel cmdLabel, bool moveUp)
@@ -104,8 +105,7 @@ public class BlockWindow : Panel
                 commandLabels.Insert(index - 1, cmdLabel);
                 return false;
             }
-        } else // moving down
-          {
+        } else { // moving down
             if (index == commandLabels.Count - 1) // Move cmdLabel out of this loop and set it to be placed below parent
             {
                 commandLabels.RemoveAt(index);
@@ -135,7 +135,6 @@ public class BlockWindow : Panel
         void DrawCommandLabels(List<CommandLabel> CommandLabels, ref Point labelLocation)
         {
             foreach (CommandLabel cmd in CommandLabels) {
-
                 cmd.Location = labelLocation;
                 cmd.OnResize(this, null);
                 cmd.MouseEnter += OnHover;
@@ -264,4 +263,7 @@ public class BlockWindow : Panel
 
     public Program Program() 
         => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
+
+    public void AddProgram(List<CommandLabel>? labels)
+        => _commandList = labels ?? throw new ArgumentNullException();
 }
