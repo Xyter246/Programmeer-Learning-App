@@ -8,6 +8,8 @@ public class MoveCommandLabel : CommandLabel
         Maximum = int.MaxValue,
     };
 
+    public MoveCommandLabel() : base() { }
+
     public override Command ConvertLabel()
         => new MoveCommand((int)_nup.Value);
 }
