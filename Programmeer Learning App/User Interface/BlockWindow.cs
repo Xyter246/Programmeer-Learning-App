@@ -75,7 +75,8 @@ public class BlockWindow : Panel
                         return true;
                     } else if (commandLabels[i - 1] is LoopCommandLabel nestedLoop) {
                         // Move cmdLabel to the end of the nested loop's list
-                        UpdatePositionsInLoop(nestedLoop.CommandLabels, cmdLabel, moveUp);
+                        commandLabels.RemoveAt(i);
+                        nestedLoop.CommandLabels.Insert(0, cmdLabel);
                         return false;
                     } else {
                         // Simple swap within the loop
@@ -91,7 +92,8 @@ public class BlockWindow : Panel
                         return true;
                     } else if (commandLabels[i + 1] is LoopCommandLabel nestedLoop) {
                         // Move cmdLabel to the start of the nested loop's list
-                        UpdatePositionsInLoop(nestedLoop.CommandLabels, cmdLabel, moveUp);
+                        commandLabels.RemoveAt(i);
+                        nestedLoop.CommandLabels.Add(cmdLabel);
                         return false;
                     } else {
                         // Simple swap within the loop
