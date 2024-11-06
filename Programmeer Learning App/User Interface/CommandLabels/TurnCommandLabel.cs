@@ -2,11 +2,11 @@
 
 public class TurnCommandLabel : CommandLabel
 {
-    private readonly ComboBox cbb = new ComboBox()
+    private readonly ComboBox _cbb = new ComboBox()
     {
         DataSource = new RelativeDir[] {RelativeDir.Right , RelativeDir.Left},
     };
 
     public override Command ConvertLabel()
-        => new TurnCommand((RelativeDir)cbb.SelectedValue!);
+        => new TurnCommand((RelativeDir)_cbb.SelectedValue!);
 }

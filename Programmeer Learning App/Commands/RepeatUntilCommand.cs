@@ -22,7 +22,7 @@ public class RepeatUntilCommand : LoopCommand
     public override Command? FromString(string[] words)
     {
         //try {
-        //    Predicate<Player> predicate = words[0];
+        //    Predicate<Player> predicate = words[1];
         //    return new RepeatUntilCommand(predicate);
         //} catch {
         return null;
