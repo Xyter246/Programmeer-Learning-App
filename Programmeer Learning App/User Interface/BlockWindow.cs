@@ -265,5 +265,8 @@ public class BlockWindow : Panel
         => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
 
     public void AddProgram(List<CommandLabel>? labels)
-        => _commandList = labels ?? throw new ArgumentNullException();
+    {
+        _commandList = labels ?? throw new ArgumentNullException();
+        UpdateScreen();
+    }
 }
