@@ -1,4 +1,5 @@
 ﻿using Programmeer_Learning_App.Commands;
+using Programmeer_Learning_App.User_Interface.CommandLabels;
 using System.Drawing.Text;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
@@ -49,88 +50,29 @@ public class BlockWindow : Panel
     // Method to re-align labels after moving a command up or down
     private void UpdatePositions(CommandLabel cmdLabel, bool moveUp)
     {
-        // First, check if the CommandLabel is in the top-level list
-        int index = _commandList.IndexOf(cmdLabel);
-        if (index == -1) // If not found in the main list, search recursively in loop command lists
-        {
-            if (!UpdatePositionsInLoop(_commandList, cmdLabel, moveUp)) return;
+
+        if (FindCommand(_commandList, cmdLabel, moveUp)) {
             // If cmdLabel is moved out of a loop list and needs to move outside the parent, position it in the main list
-            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel label && label.CommandLabels.Contains(cmdLabel));
-            if (parentIndex == -1) return;
-            if (moveUp) {
+            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel && ((LoopCommandLabel)cl).CommandLabels.Contains(cmdLabel));
+            if (moveUp && parentIndex != -1) {
                 _commandList.Insert(parentIndex, cmdLabel); // Insert it above the parent loop
-            } else {
+            } else if (!moveUp && parentIndex != -1) {
                 _commandList.Insert(parentIndex + 1, cmdLabel); // Insert it below the parent loop
             }
         }
 
-        if (moveUp) {
-            // Standard up-move within the top-level list
-            if (index > 0 && _commandList[index - 1] is LoopCommandLabel loopCmd) {
-                // Move cmdLabel to the end of the previous LoopCommandLabel's list
-                loopCmd.CommandLabels.Add(cmdLabel);
-                _commandList.RemoveAt(index);
-            } else if (index > 0) {
-                // Simple swap within the top-level list
-                _commandList.RemoveAt(index);
-                _commandList.Insert(index - 1, cmdLabel);
-            }
-        } else { // move down
-            // Standard down-move within the top-level list
-            if (index < _commandList.Count - 1 && _commandList[index + 1] is LoopCommandLabel loopCmd) {
-                // Move cmdLabel to the start of the next LoopCommandLabel's list
-                loopCmd.CommandLabels.Insert(0, cmdLabel);
-                _commandList.RemoveAt(index);
-            } else if (index < _commandList.Count - 1) {
-                // Simple swap within the top-level list
-                _commandList.RemoveAt(index);
-                _commandList.Insert(index + 1, cmdLabel);
-            }
-        }
-
         // Refresh display after reordering
-        UpdateScreen();
+        UpdateScreen(_commandList);
     }
 
-    private bool UpdatePositionsInLoop(List<CommandLabel> commandLabels, CommandLabel cmdLabel, bool moveUp)
+    private bool FindCommand(List<CommandLabel> commandLabels, CommandLabel cmdLabel, bool moveUp)
     {
         for (int i = 0; i < commandLabels.Count; i++) {
             if (commandLabels[i] == cmdLabel) {
-                if (moveUp) {
-                    if (i == 0) // Move cmdLabel out of this loop and set it to be placed above parent
-                    {
-                        return true;
-                    } else if (commandLabels[i - 1] is LoopCommandLabel nestedLoop) {
-                        // Move cmdLabel to the end of the nested loop's list
-                        nestedLoop.CommandLabels.Add(cmdLabel);
-                        commandLabels.RemoveAt(i);
-                        return false;
-                    } else {
-                        // Simple swap within the loop
-                        commandLabels.RemoveAt(i);
-                        commandLabels.Insert(i - 1, cmdLabel);
-                        return false;
-                    }
-                } else // moving down
-                  {
-                    if (i == commandLabels.Count - 1) // Move cmdLabel out of this loop and set it to be placed below parent
-                    {
-                        return true;
-                    } else if (commandLabels[i + 1] is LoopCommandLabel nestedLoop) {
-                        // Move cmdLabel to the start of the nested loop's list
-                        nestedLoop.CommandLabels.Insert(0, cmdLabel);
-                        commandLabels.RemoveAt(i);
-                        return false;
-                    } else {
-                        // Simple swap within the loop
-                        commandLabels.RemoveAt(i);
-                        commandLabels.Insert(i + 1, cmdLabel);
-                        return false;
-                    }
-                }
+                return MoveCommand(commandLabels, cmdLabel, i, moveUp);
             } else if (commandLabels[i] is LoopCommandLabel loopCmd) {
                 // Recursive check within nested loops
-                if (UpdatePositionsInLoop(loopCmd.CommandLabels, cmdLabel, moveUp)) {
+                if (FindCommand(loopCmd.CommandLabels, cmdLabel, moveUp)) {
                     // Move cmdLabel outside of the nested loop to the appropriate position
                     if (moveUp) {
                         commandLabels.Insert(i, cmdLabel);
@@ -142,6 +84,44 @@ public class BlockWindow : Panel
             }
         }
         return false; // If not found within the nested loop, return false
+    }
+
+    private bool MoveCommand(List<CommandLabel> commandLabels, CommandLabel cmdLabel, int index, bool moveUp)
+    {
+        if (moveUp) {
+            if (index == 0) // Move cmdLabel out of this loop and set it to be placed above parent
+            {
+                commandLabels.RemoveAt(index);
+                return true;
+            } else if (commandLabels[index - 1] is LoopCommandLabel nestedLoop) {
+                // Move cmdLabel to the end of the nested loop's list
+                commandLabels.RemoveAt(index);
+                nestedLoop.CommandLabels.Insert(0, cmdLabel);
+                return false;
+            } else {
+                // Simple swap within the loop
+                commandLabels.RemoveAt(index);
+                commandLabels.Insert(index - 1, cmdLabel);
+                return false;
+            }
+        } else // moving down
+          {
+            if (index == commandLabels.Count - 1) // Move cmdLabel out of this loop and set it to be placed below parent
+            {
+                commandLabels.RemoveAt(index);
+                return true;
+            } else if (commandLabels[index + 1] is LoopCommandLabel nestedLoop) {
+                // Move cmdLabel to the start of the nested loop's list
+                commandLabels.RemoveAt(index);
+                nestedLoop.CommandLabels.Add(cmdLabel);
+                return false;
+            } else {
+                // Simple swap within the loop
+                commandLabels.RemoveAt(index);
+                commandLabels.Insert(index + 1, cmdLabel);
+                return false;
+            }
+        }
     }
 
     private void UpdateScreen()
