@@ -1,6 +1,4 @@
-﻿using Programmeer_Learning_App.Entities;
-
-namespace Programmeer_Learning_App.Commands;
+﻿namespace Programmeer_Learning_App.Commands;
 
 public class MoveCommand : Command
 {

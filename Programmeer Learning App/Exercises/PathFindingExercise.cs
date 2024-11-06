@@ -2,7 +2,6 @@
 
 public class PathFindingExercise : Exercise
 {
-    public Point PlayerPos;
     public Point EndPoint;
 
     private PathFindingExercise(Size size) : base(size) { }
@@ -39,7 +38,8 @@ public class PathFindingExercise : Exercise
             }
 
         // If there are multiple or no PlayerPos given, it'd be the last one iterated over or the first square (as default).
-        pfe.PlayerPos = playerPos ?? new Point(0, 0);
+        pfe.Player = playerPos is not null ? new Player((Point)playerPos, CardinalDir.East) : Player.Empty;
+
         pfe.EndPoint = endPoint ?? throw new ArgumentException(@"There must be an EndPoint for an Exercise.");
         return pfe;
     }

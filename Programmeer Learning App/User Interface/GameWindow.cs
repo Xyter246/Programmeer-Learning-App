@@ -15,8 +15,8 @@ public class GameWindow : Form
     private readonly CommandWindow _cmdWindow;
     private readonly BlockWindow _blockWindow;
     private readonly TopBar _topBar;
-    private RunWindow? _runWindow;
-    private bool _running = false;
+    private readonly RunWindow _runWindow;
+    private bool _running => !this._runWindow.RunHasFinished;
 
     public int UsableHeight;
     public int UsableStartLocation;
@@ -48,6 +48,12 @@ public class GameWindow : Form
         this.Controls.Add(_cmdWindow);
         #endregion
 
+        #region RunWindow
+        _runWindow = new RunWindow();
+        _runWindow.Location = new Point(0, UsableStartLocation);
+        this.Controls.Add(_runWindow);
+        #endregion
+
         this.OnResize(null, null);
     }
 
@@ -57,26 +63,19 @@ public class GameWindow : Form
         this.UIScalingFactor = this.Size.Width / (double)this.Size.Height;
         this._cmdWindow.OnResize(this, ea);
         this._blockWindow.OnResize(this, ea, _cmdWindow.Width);
-        this._runWindow?.OnResize(this, ea);
+        this._runWindow.OnResize(this, ea);
     }
 
     public void runButton_Click(object? o, EventArgs ea)
     {
+        if (this._running) return;
+        _runWindow.Run(_blockWindow.Program());
+    }
 
-        if (!this._running) {
-            _runWindow = new RunWindow(_blockWindow.Program());
-            this.Controls.Add(_runWindow);
-        }
-
-        else {
-            this.Controls.Remove(_runWindow);
-            _runWindow?.Dispose();
-            _runWindow = null;
-        }
-
-        this.OnResize(null, null);
-
-        this._running = !this._running;
+    public void resetButton_Click(object? o, EventArgs ea)
+    {
+        _runWindow.ResetRun();
+        _blockWindow.ClearCommands();
     }
 
     public void exportButton_Click(object? o, EventArgs ea) 

@@ -13,6 +13,7 @@ public class TopBar : Label
         this.Dock = DockStyle.Top;
 
         makeButton(@"RUN", gameWindow.runButton_Click);
+        makeButton(@"RESET", gameWindow.resetButton_Click);
         makeButton(@"EXPORT", gameWindow.exportButton_Click);
         makeButton(@"IMPORT", gameWindow.importButton_Click);
         return;
@@ -33,4 +34,9 @@ public class TopBar : Label
         Point ButtonOffsetRight()
             => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width) + _bufferSize.Width, (this.Height - _buttonSize.Height) / 2);
     }
+
+    //public Exercise GetExercise()
+    //{
+    //    return new PathFindingExercise();
+    //}
 }

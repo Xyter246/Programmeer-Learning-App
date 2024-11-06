@@ -34,14 +34,15 @@ public class CommandWindow : Panel
         Point buttonLocation = new Point(10, 10);
         _moveCmdButton = InitializeButton(new MoveCommandLabel());
         _repeatCmdButton = InitializeButton(new RepeatCommandLabel());
-        // _turnCmdButton = InitializeButton(new TurnCommandLabel());
+        _turnCmdButton = InitializeButton(new TurnCommandLabel());
+        return;
 
         // Method to initialize and position buttons
         Button InitializeButton(CommandLabel cmd)
         {
             Button button = new Button();
             button.BackColor = Color.AliceBlue;
-            button.Text = cmd.Name;
+            button.Text = cmd.ToString();
             button.FlatStyle = FlatStyle.Flat;
             button.Location = buttonLocation;
             button.Click += ButtonClicked;
@@ -67,11 +68,14 @@ public class CommandWindow : Panel
         if (o is not Button button) return;
 
         switch(button.Tag!) {
-            case MoveCommandLabel moveCmdLabel:
+            case MoveCommandLabel:
                 _blockWindow.AddCommand(new MoveCommandLabel());
                 break;
-            case RepeatCommandLabel repeatCmdLabel:
+            case RepeatCommandLabel:
                 _blockWindow.AddCommand(new RepeatCommandLabel());
+                break;
+            case TurnCommandLabel:
+                _blockWindow.AddCommand(new TurnCommandLabel());
                 break;
             default: return;
         }

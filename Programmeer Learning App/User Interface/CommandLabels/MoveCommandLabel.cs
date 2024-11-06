@@ -11,9 +11,19 @@ public class MoveCommandLabel : CommandLabel
 
     public MoveCommandLabel() : base()
     {
-        this.Text = Name;
+        this.Controls.Add(_nup);
     }
 
     public override Command ConvertLabel()
         => new MoveCommand((int)_nup.Value);
+
+    public override string ToString()
+        => "Move";
+
+    public override void OnResize(object? o, EventArgs? ea)
+    {
+        base.OnResize(o, ea);
+        _nup.Size = new Size(this.Width / 3, this.Height);
+        _nup.Location = new Point(this.Width - _nup.Width, this.Height - _nup.Height);
+    }
 }

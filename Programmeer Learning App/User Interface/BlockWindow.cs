@@ -34,16 +34,16 @@ public class BlockWindow : Panel
     // Method to add a new command label to the panel
     public void AddCommand(CommandLabel cmdLabel)
     {
+        this.Resize += cmdLabel.OnResize;
         _commandList.Add(cmdLabel);
-        UpdateScreen(_commandList);
+        UpdateScreen();
     }
 
     // Method to remove a command label by command reference
-    public void RemoveCommand(CommandLabel cmdLabel)
+    public void ClearCommands()
     {
-        if (_commandList.Remove(cmdLabel)) {
-            UpdateScreen(_commandList); // Refresh the display
-        }
+        _commandList.Clear();
+        UpdateScreen();
     }
 
     // Method to re-align labels after moving a command up or down
@@ -53,16 +53,15 @@ public class BlockWindow : Panel
         int index = _commandList.IndexOf(cmdLabel);
         if (index == -1) // If not found in the main list, search recursively in loop command lists
         {
-            if (UpdatePositionsInLoop(_commandList, cmdLabel, moveUp, out bool needsParentMove) && needsParentMove) {
-                // If cmdLabel is moved out of a loop list and needs to move outside the parent, position it in the main list
-                int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel && ((LoopCommandLabel)cl).CommandLabels.Contains(cmdLabel));
-                if (moveUp && parentIndex != -1) {
-                    _commandList.Insert(parentIndex, cmdLabel); // Insert it above the parent loop
-                } else if (!moveUp && parentIndex != -1) {
-                    _commandList.Insert(parentIndex + 1, cmdLabel); // Insert it below the parent loop
-                }
+            if (!UpdatePositionsInLoop(_commandList, cmdLabel, moveUp)) return;
+            // If cmdLabel is moved out of a loop list and needs to move outside the parent, position it in the main list
+            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel label && label.CommandLabels.Contains(cmdLabel));
+            if (parentIndex == -1) return;
+            if (moveUp) {
+                _commandList.Insert(parentIndex, cmdLabel); // Insert it above the parent loop
+            } else {
+                _commandList.Insert(parentIndex + 1, cmdLabel); // Insert it below the parent loop
             }
-            return;
         }
 
         if (moveUp) {
@@ -76,8 +75,7 @@ public class BlockWindow : Panel
                 _commandList.RemoveAt(index);
                 _commandList.Insert(index - 1, cmdLabel);
             }
-        } else // move down
-          {
+        } else { // move down
             // Standard down-move within the top-level list
             if (index < _commandList.Count - 1 && _commandList[index + 1] is LoopCommandLabel loopCmd) {
                 // Move cmdLabel to the start of the next LoopCommandLabel's list
@@ -91,7 +89,7 @@ public class BlockWindow : Panel
         }
 
         // Refresh display after reordering
-        UpdateScreen(_commandList);
+        UpdateScreen();
     }
 
     private bool UpdatePositionsInLoop(List<CommandLabel> commandLabels, CommandLabel cmdLabel, bool moveUp)
@@ -132,7 +130,7 @@ public class BlockWindow : Panel
                 }
             } else if (commandLabels[i] is LoopCommandLabel loopCmd) {
                 // Recursive check within nested loops
-                if (UpdatePositionsInLoop(loopCmd.CommandLabels, cmdLabel, moveUp) {
+                if (UpdatePositionsInLoop(loopCmd.CommandLabels, cmdLabel, moveUp)) {
                     // Move cmdLabel outside of the nested loop to the appropriate position
                     if (moveUp) {
                         commandLabels.Insert(i, cmdLabel);
@@ -146,29 +144,28 @@ public class BlockWindow : Panel
         return false; // If not found within the nested loop, return false
     }
 
-
-
-    private void UpdateScreen(List<CommandLabel> commandList)
+    private void UpdateScreen()
     {
         _blockPanel.Controls.Clear();
-        Point labelLocation = new Point(10, 10);
+        Point startingLabelLocation = new Point(10, 10);
 
-        DrawCommandLabels(commandList, ref labelLocation);
+        DrawCommandLabels(_commandList, ref startingLabelLocation);
+        return;
 
         void DrawCommandLabels(List<CommandLabel> CommandLabels, ref Point labelLocation)
         {
             foreach (CommandLabel cmd in CommandLabels) {
 
                 cmd.Location = labelLocation;
+                cmd.OnResize(this, null);
                 cmd.MouseEnter += OnHover;
                 _blockPanel.Controls.Add(cmd);
                 labelLocation.Y += cmd.Height + 10;
 
-                if (cmd is LoopCommandLabel loopCmd) {
-                    labelLocation.X += 10;
-                    DrawCommandLabels(loopCmd.CommandLabels, ref labelLocation);
-                    labelLocation.X -= 10;
-                }
+                if (cmd is not LoopCommandLabel loopCmd) continue;
+                labelLocation.X += 10;
+                DrawCommandLabels(loopCmd.CommandLabels, ref labelLocation);
+                labelLocation.X -= 10;
             }
         }
     }
@@ -235,11 +232,6 @@ public class BlockWindow : Panel
         downArrow.MouseLeave += HideControls;
     }
 
-    private NumericUpDown CreateNumericBox()
-    {
-        throw new NotImplementedException();
-    }
-
     private Panel CreateTriangleBox(bool isUp)
     {
         Panel box = new Panel {
@@ -290,5 +282,6 @@ public class BlockWindow : Panel
         this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
     }
 
-    public Program Program() => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
+    public Program Program() 
+        => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
 }
