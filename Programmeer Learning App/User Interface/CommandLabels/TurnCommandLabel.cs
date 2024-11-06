@@ -15,7 +15,7 @@ public class TurnCommandLabel : CommandLabel
 
     public TurnCommandLabel(RelativeDir relDir) : this()
     {
-        _cbb.SelectedItem = relDir;
+        _cbb.SelectedItem = relDir; // Doesn't function properly
     }
 
     public override Command ConvertLabel()

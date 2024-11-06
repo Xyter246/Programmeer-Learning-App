@@ -1,10 +1,4 @@
-﻿using Programmeer_Learning_App.Commands;
-using Programmeer_Learning_App.User_Interface.CommandLabels;
-using System.Drawing.Text;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
-
-namespace Programmeer_Learning_App.User_Interface;
+﻿namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods

@@ -10,7 +10,7 @@ public class TurnCommand : Command
     }
 
     public override void Execute(Player player)
-        => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)TurnDir) % Enum.GetNames(typeof(CardinalDir)).Length);
+        => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)TurnDir + 4) % Enum.GetNames(typeof(CardinalDir)).Length);
 
     public override string ToString()
         => $"Turn {TurnDir}";
@@ -19,5 +19,6 @@ public class TurnCommand : Command
         => Enum.TryParse(words[1], out RelativeDir relDir) ? new TurnCommand(relDir) : null;
 
     public override CommandLabel ToLabel()
+    // Constructor of TurnCommandLabel doesn't convert input properly
         => new TurnCommandLabel(TurnDir);
 }

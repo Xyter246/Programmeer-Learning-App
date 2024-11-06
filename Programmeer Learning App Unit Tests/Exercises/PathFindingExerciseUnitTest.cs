@@ -20,7 +20,7 @@ public class PathFindingExerciseUnitTest
         PathFindingExercise pfe = PathFindingExercise.Generate(game);
         
         // Assert
-        Assert.Equal(new Point(0, 0), pfe.Player);
+        Assert.Equal(new Point(0, 0), pfe.Player.Pos);
         Assert.Equal(new Point(4, 4), pfe.EndPoint);
         Assert.True(NullChecker(pfe, new Point[] {
                                  new Point(1, 0), 

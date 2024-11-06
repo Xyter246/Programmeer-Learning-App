@@ -1,6 +1,4 @@
-﻿using System.Xml;
-using Programmeer_Learning_App.Exercises;
-using Xunit.Sdk;
+﻿using Programmeer_Learning_App.Exercises;
 
 namespace Programmeer_Learning_App.User_Interface;
 public class RunWindow : Panel
@@ -51,10 +49,10 @@ public class RunWindow : Panel
         Size boxSize = new Size(this.Width / gridSize.Width, this.Height / gridSize.Height);
 
         for (int x = 0; x < gridSize.Width; x++)
-            for (int y = 0; y < gridSize.Height; y++) {
+            for (int y = 0; y > -gridSize.Height; y--) {
                 Brush boxColor = (x + y) % 2 == 0 ? Brushes.Green : Brushes.GreenYellow;
-                gr.FillRectangle(boxColor, x * boxSize.Width, y * boxSize.Height, boxSize.Width, boxSize.Height);
-                gr.DrawRectangle(Pens.Black, x * boxSize.Width, y * boxSize.Height, boxSize.Width - boxSize.Width / 100, boxSize.Height - boxSize.Height / 100);
+                gr.FillRectangle(boxColor, x * boxSize.Width, -y * boxSize.Height, boxSize.Width, boxSize.Height);
+                gr.DrawRectangle(Pens.Black, x * boxSize.Width, -y * boxSize.Height, boxSize.Width - boxSize.Width / 100, boxSize.Height - boxSize.Height / 100);
             }
 
         DrawPlayer(gr, boxSize);
@@ -62,11 +60,9 @@ public class RunWindow : Panel
 
     private void DrawPlayer(Graphics gr, Size boxSize)
     {
-        Point topLeftCorner = new Point(_player.Pos.X * boxSize.Width, _player.Pos.Y * boxSize.Height);
         const int bufferSize = 5;
-
         Point[] playerPolygon = CalcPlayerPolygon(_player.FacingDir);
-        Point playerOffset = new Point(_player.Pos.X * boxSize.Width, _player.Pos.Y * boxSize.Height);
+        Point playerOffset = new Point(_player.Pos.X * boxSize.Width, -_player.Pos.Y * boxSize.Height);
         
         gr.DrawPolygon(Pens.Black, playerPolygon.Select(p => p with {X = p.X + playerOffset.X, Y = p.Y + playerOffset.Y}).ToArray());
         return;
@@ -105,7 +101,7 @@ public class RunWindow : Panel
         if (o is not GameWindow gamewindow) return;
         this.Size = new Size((gamewindow.Size.Width / 2) - 16, gamewindow.UsableHeight);
         this.Location = new Point(gamewindow.Width / 2, gamewindow.UsableStartLocation);
-        Invalidate();
+        this.Invalidate();
     }
 
     public async void Run(Program program)
