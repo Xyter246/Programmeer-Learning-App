@@ -12,31 +12,26 @@ public class TopBar : Label
         this.Height = 30;
         this.Dock = DockStyle.Top;
 
-        MakeButton(@"RUN", gameWindow.runButton_Click);
-        MakeButton(@"RESET", gameWindow.resetButton_Click);
-        MakeButton(@"EXPORT", gameWindow.exportButton_Click);
-        MakeButton(@"IMPORT", gameWindow.importButton_Click);
-        MakeButton(@"LEARN", gameWindow.exerciseButton_Click);
-    }
-
-    /// <summary>
-    /// Create a preset Button.
-    /// </summary>
-    /// <param name="buttonName">Custom Button Name</param>
-    /// <param name="eh">EventHandler, in case the Button gets pressed.</param>
-    /// <returns>The newly created Button.</returns>
-    private Button MakeButton(string buttonName, EventHandler eh)
-    {
-        Button button = new Button();
-        button.FlatStyle = FlatStyle.Flat;
-        button.BackColor = Color.FromArgb(0x31, 0x82, 0x33);
-        button.Text = buttonName;
-        button.Size = _buttonSize;
-        button.Location = ButtonOffsetRight();
-        button.Click += eh;
-        this.Controls.Add(button);
-        return button;
-    }
+        makeButton(@"RUN", gameWindow.runButton_Click);
+        makeButton(@"RESET", gameWindow.resetButton_Click);
+        makeButton(@"EXPORT", gameWindow.exportButton_Click);
+        makeButton(@"IMPORT", gameWindow.importButton_Click);
+        makeButton(@"LEARN", gameWindow.exerciseButton_Click);
+        makeButton(@"METRICS", gameWindow.metricsButton_Click);
+        return;
+        
+        Button makeButton(string buttonName, EventHandler eh)
+        {
+            Button button = new Button();
+            button.FlatStyle = FlatStyle.Flat;
+            button.BackColor = Color.FromArgb(0x31, 0x82, 0x33);
+            button.Text = buttonName;
+            button.Size = _buttonSize;
+            button.Location = ButtonOffsetRight();
+            button.Click += eh;
+            this.Controls.Add(button);
+            return button;
+        }
 
     /// <summary>
     /// Function to calculate new ButtonOffset.

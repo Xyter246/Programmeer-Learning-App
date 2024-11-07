@@ -111,4 +111,13 @@ public class GameWindow : Form
         _runWindow.SetExercise(pfe);
         _blockWindow.ClearCommands();
     }
+
+    public void metricsButton_Click(object? o, EventArgs ea)
+    {
+        Program program = _blockWindow.Program();
+
+        MessageBox.Show("Number of Commands: " + program.NumOfCommands() + "\n"
+            + "Max Nesting Depth: " + program.MaxNestingDepth() + "\n"
+            + "Number of RepeatCommands: " + program.NumOfRepeatCommands());
+    }
 }

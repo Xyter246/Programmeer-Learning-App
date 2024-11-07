@@ -71,6 +71,7 @@ public static class Metric
         int minX = player.Pos.X, maxX = player.Pos.X;
         int minY = player.Pos.Y, maxY = player.Pos.Y;
 
+        program.InitializeProgram();
         while (!program.HasEnded)
         {
             program.StepOnce(player);

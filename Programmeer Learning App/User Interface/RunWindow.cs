@@ -20,7 +20,9 @@ public class RunWindow : Panel
         _exercise = null;
         _player = Player.Empty;
 
-        ChangeGrid();
+        _gridSize = _baseSize;
+
+        ChangeSize();
 
         this.Paint += DrawWorld;
     }
@@ -194,7 +196,8 @@ public class RunWindow : Panel
     /// </summary>
     private void ChangeGrid()
     {
-        _gridSize = _exercise?.GridSize ?? _baseSize;
+        if (_gridSize.Width < _baseSize.Width) _gridSize.Width = _baseSize.Width;
+        if (_gridSize.Height < _baseSize.Height) _gridSize.Height = _baseSize.Height;
         _boxSize = new Size(this.Width / _gridSize.Width, this.Height / _gridSize.Height);
     }
 
@@ -205,7 +208,19 @@ public class RunWindow : Panel
     public async void Run(Program program)
     {
         ResetRun();
-        program.Initialize();
+
+        // Check if we are in sandbox mode, and update world size accordingly
+        if (_exercise == null) {
+            (Point, Size) sizeTuple = program.MaxGridSize(_player);
+            _gridSize = new Size(sizeTuple.Item2.Width + 1, sizeTuple.Item2.Height + 1);
+            _player.Pos = new Point(-sizeTuple.Item1.X, -sizeTuple.Item1.Y);
+            ChangeSize();
+            this.Invalidate();
+        }
+
+        _tracerPoints.Add(_player.Pos);
+
+        program.InitializeProgram();
         _forceStop = false;
         while (!program.HasEnded && !_forceStop) {
             await Task.Delay(_programStepDelay);
@@ -246,7 +261,6 @@ public class RunWindow : Panel
     {
         _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
         _tracerPoints.Clear();
-        _tracerPoints.Add(_player.Pos);
         _forceStop = true;
         this.Invalidate();
     }
