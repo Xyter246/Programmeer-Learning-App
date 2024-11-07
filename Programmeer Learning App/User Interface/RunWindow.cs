@@ -9,6 +9,8 @@ public class RunWindow : Panel
     private const int _programStepDelay = 200; // in milliseconds
     private Exercise? _exercise;
     private Player _player;
+    private readonly List<Point> _tracerPoints = new List<Point>();
+    private readonly Brush _tracerBrush = new SolidBrush(Color.Brown);
     private readonly Size _baseSize = new Size(5, 5);
     private Size _gridSize;
     private Size _boxSize;
@@ -30,6 +32,7 @@ public class RunWindow : Panel
         ChangeSize();
 
         this.Paint += DrawExercise;
+        ResetRun();
         Invalidate();
     }
 
@@ -53,7 +56,35 @@ public class RunWindow : Panel
                 gr.DrawRectangle(Pens.Black, x * _boxSize.Width, -y * _boxSize.Height, _boxSize.Width - _boxSize.Width / 100, _boxSize.Height - _boxSize.Height / 100);
             }
 
+        DrawPath(gr);
         DrawPlayer(gr);
+    }
+
+    private void DrawPath(Graphics gr)
+    {
+        int tracerwidth = 10;
+        for (int i = 1; i < _tracerPoints.Count; i++) {
+            Point p1 = _tracerPoints[i-1];
+            Point p2 = _tracerPoints[i];
+            p1.Y = -p1.Y;
+            p2.Y = -p2.Y;
+
+            // have p1 have the minimal values of the 2 points, and p2 the maximum values.
+            if (p1.X > p2.X) 
+                (p1.X, p2.X) = (p2.X, p1.X);
+            if (p1.Y > p2.Y)
+                (p1.Y, p2.Y) = (p2.Y, p1.Y);
+            
+            Point p1Tranformed = TransformPoint(p1);
+            Point p2Tranformed = TransformPoint(p2);
+            int width = p2Tranformed.X - p1Tranformed.X + tracerwidth/2;
+            int height = p2Tranformed.Y - p1Tranformed.Y + tracerwidth/2;
+            gr.FillRectangle(_tracerBrush, p1Tranformed.X - tracerwidth/2, p1Tranformed.Y - tracerwidth/2, width, height);
+        }
+        return;
+
+        Point TransformPoint(Point p)
+            => new Point(p.X * _boxSize.Width + _boxSize.Width / 2, p.Y * _boxSize.Height + _boxSize.Height / 2);
     }
 
     private void DrawPlayer(Graphics gr)
@@ -135,21 +166,24 @@ public class RunWindow : Panel
     {
         ResetRun();
         _forceStop = false;
-        while (!program.HasEnded) {
+        while (!program.HasEnded && ! _forceStop) {
             await Task.Delay(_programStepDelay);
-            if (_forceStop) {
-                this.Invalidate();
-                break;
+            if (!_forceStop) {
+                program.StepOnce(_player);
+                _tracerPoints.Add(_player.Pos);
             }
-            program.StepOnce(_player);
             this.Invalidate();
         }
+        if (_exercise != null && _exercise.IsCompleted(_player))
+            _exercise.OnSuccess();
         RunHasFinished = true;
     }
 
     public void ResetRun()
     {
-        _player = (Player)_exercise?.Player.Clone()! ?? (Player)Player.Empty.Clone();
+        _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
+        _tracerPoints.Clear();
+        _tracerPoints.Add(_player.Pos);
         _forceStop = true;
         this.Invalidate();
     }

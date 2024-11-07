@@ -98,7 +98,8 @@ public class GameWindow : Form
         while (!sr.EndOfStream)
             lines.Add(sr.ReadLine()!);
 
-        _runWindow.SetExercise(PathFindingExercise.Generate(lines.ToArray()));
-
+        PathFindingExercise pfe =  PathFindingExercise.Generate(lines.ToArray());
+        _runWindow.SetExercise(pfe);
+        _blockWindow.ClearCommands();
     }
 }
