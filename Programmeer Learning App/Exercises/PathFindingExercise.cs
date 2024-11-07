@@ -26,9 +26,9 @@ public class PathFindingExercise : Exercise
                 // ...determine what Entity it must be.
                 switch (path[y][x]) {
                     case 's':
-                        playerPos = new Point(x, y);
+                        playerPos = new Point(x, -y);
                         break;
-                    case '+':
+                    case '+' or ' ':
                         pfe.Grid[x, y] = new Blockade();
                         break;
                     case 'x':

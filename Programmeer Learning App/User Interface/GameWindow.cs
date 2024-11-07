@@ -116,8 +116,8 @@ public class GameWindow : Form
     {
         Program program = _blockWindow.Program();
 
-        MessageBox.Show(@$"Number of Commands: {program.NumOfCommands()} \n"
-                      + @$"Max Nesting Depth: {program.MaxNestingDepth()} \n"
-                      + @$"Number of RepeatCommands: {program.NumOfRepeatCommands()} \n");
+        MessageBox.Show($"Number of Commands: {program.NumOfCommands()} \n"
+                      + $"Max Nesting Depth: {program.MaxNestingDepth()} \n"
+                      + $"Number of RepeatCommands: {program.NumOfRepeatCommands()} \n", @"Metrics");
     }
 }

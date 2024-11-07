@@ -11,12 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="xunit" Version="2.9.2" />
+    <Compile Remove="Example Exercises\**" />
+    <Compile Remove="Example Programs\**" />
+    <EmbeddedResource Remove="Example Exercises\**" />
+    <EmbeddedResource Remove="Example Programs\**" />
+    <None Remove="Example Exercises\**" />
+    <None Remove="Example Programs\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Example Programs\" />
-    <Folder Include="Example Exercises\" />
+    <PackageReference Include="xunit" Version="2.9.2" />
   </ItemGroup>
 
 </Project>

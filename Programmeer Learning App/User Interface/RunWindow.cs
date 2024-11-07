@@ -17,6 +17,7 @@ public class RunWindow : Panel
 
     public RunWindow()
     {
+        DoubleBuffered = true;
         _exercise = null;
         _player = Player.Empty;
 
@@ -35,7 +36,7 @@ public class RunWindow : Panel
     {
         _exercise = exercise;
         _player = (Player)_exercise.Player.Clone();
-        ChangeGrid();
+        ChangeGrid(_exercise.GridSize);
 
         this.Paint += DrawExercise;
         ResetRun();
@@ -194,10 +195,13 @@ public class RunWindow : Panel
     /// <summary>
     /// Changes the values of the Grid.
     /// </summary>
-    private void ChangeGrid()
+    private void ChangeGrid(Size? gridSize = null)
     {
-        if (_gridSize.Width < _baseSize.Width) _gridSize.Width = _baseSize.Width;
-        if (_gridSize.Height < _baseSize.Height) _gridSize.Height = _baseSize.Height;
+        if (gridSize is null) {
+            if (_gridSize.Width < _baseSize.Width) _gridSize.Width = _baseSize.Width;
+            if (_gridSize.Height < _baseSize.Height) _gridSize.Height = _baseSize.Height;
+        }
+        else _gridSize = (Size)gridSize;
         _boxSize = new Size(this.Width / _gridSize.Width, this.Height / _gridSize.Height);
     }
 
