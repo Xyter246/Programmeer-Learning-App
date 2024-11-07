@@ -30,6 +30,7 @@ public class BlockWindow : Panel
     public void AddCommand(CommandLabel cmdLabel)
     {
         this.Resize += cmdLabel.OnResize;
+        cmdLabel.MouseEnter += OnHover;
         _commandList.Add(cmdLabel);
         UpdateScreen();
     }
@@ -130,8 +131,6 @@ public class BlockWindow : Panel
         {
             foreach (CommandLabel cmd in CommandLabels) {
                 cmd.Location = labelLocation;
-                cmd.OnResize(this, null);
-                cmd.MouseEnter += OnHover;
                 _blockPanel.Controls.Add(cmd);
                 labelLocation.Y += cmd.Height + 10;
 
