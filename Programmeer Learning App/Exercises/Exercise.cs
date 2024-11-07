@@ -12,4 +12,8 @@ public abstract class Exercise
         GridSize = size;
         Player = Player.Empty;
     }
+
+    public abstract bool IsCompleted(Player player);
+
+    public abstract void OnSuccess();
 }

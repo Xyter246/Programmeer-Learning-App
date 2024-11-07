@@ -99,6 +99,7 @@ public class GameWindow : Form
             lines.Add(sr.ReadLine()!);
 
         PathFindingExercise pfe =  PathFindingExercise.Generate(lines.ToArray());
-        _runWindow = new RunWindow(pfe);
+        _runWindow.SetExercise(pfe);
+        _blockWindow.ClearCommands();
     }
 }

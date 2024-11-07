@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App.Exercises;
+﻿using Programmeer_Learning_App.Entities;
+
+namespace Programmeer_Learning_App.Exercises;
 
 public class PathFindingExercise : Exercise
 {
@@ -42,5 +44,13 @@ public class PathFindingExercise : Exercise
 
         pfe.EndPoint = endPoint ?? throw new ArgumentException(@"There must be an EndPoint for an Exercise.");
         return pfe;
+    }
+
+    public override bool IsCompleted(Player player)
+        => player.Pos == this.EndPoint;
+
+    public override void OnSuccess()
+    {
+        MessageBox.Show(@"Good job solving this exercise", @"Exercise");
     }
 }

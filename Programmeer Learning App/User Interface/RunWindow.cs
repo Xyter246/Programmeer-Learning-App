@@ -10,10 +10,10 @@ public class RunWindow : Panel
     private Exercise? _exercise;
     private Player _player;
     private readonly List<Point> _tracerPoints = new List<Point>();
+    private readonly Brush _tracerBrush = new SolidBrush(Color.Brown);
     private readonly Size _baseSize = new Size(5, 5);
     private Size _gridSize;
     private Size _boxSize;
-    private Brush _tracerBrush = new SolidBrush(Color.Brown);
 
     public RunWindow()
     {
@@ -32,6 +32,7 @@ public class RunWindow : Panel
         ChangeSize();
 
         this.Paint += DrawExercise;
+        ResetRun();
         Invalidate();
     }
 
@@ -55,11 +56,11 @@ public class RunWindow : Panel
                 gr.DrawRectangle(Pens.Black, x * _boxSize.Width, -y * _boxSize.Height, _boxSize.Width - _boxSize.Width / 100, _boxSize.Height - _boxSize.Height / 100);
             }
 
-        DrawPath(gr, boxSize);
-        DrawPlayer(gr, boxSize);
+        DrawPath(gr);
+        DrawPlayer(gr);
     }
 
-    private void DrawPath(Graphics gr, Size boxSize)
+    private void DrawPath(Graphics gr)
     {
         int tracerwidth = 10;
         for (int i = 1; i < _tracerPoints.Count; i++) {
@@ -83,10 +84,10 @@ public class RunWindow : Panel
         return;
 
         Point TransformPoint(Point p)
-            => new Point(p.X * boxSize.Width + boxSize.Width / 2, p.Y * boxSize.Height + boxSize.Height / 2);
+            => new Point(p.X * _boxSize.Width + _boxSize.Width / 2, p.Y * _boxSize.Height + _boxSize.Height / 2);
     }
 
-    private void DrawPlayer(Graphics gr, Size boxSize)
+    private void DrawPlayer(Graphics gr)
     {
         const int bufferSize = 5;
         Point[] playerPolygon = CalcPlayerPolygon(_player.FacingDir);
@@ -173,6 +174,8 @@ public class RunWindow : Panel
             }
             this.Invalidate();
         }
+        if (_exercise != null && _exercise.IsCompleted(_player))
+            _exercise.OnSuccess();
         RunHasFinished = true;
     }
 

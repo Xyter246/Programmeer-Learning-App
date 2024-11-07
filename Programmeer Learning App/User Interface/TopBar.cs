@@ -1,6 +1,4 @@
-﻿using Programmeer_Learning_App.Exercises;
-
-namespace Programmeer_Learning_App.User_Interface;
+﻿namespace Programmeer_Learning_App.User_Interface;
 
 public class TopBar : Label
 {
@@ -20,7 +18,7 @@ public class TopBar : Label
         makeButton(@"IMPORT", gameWindow.importButton_Click);
         makeButton(@"LEARN", gameWindow.exerciseButton_Click);
         return;
-
+        
         Button makeButton(string buttonName, EventHandler eh)
         {
             Button button = new Button();
