@@ -17,7 +17,7 @@ public class CommandWindow : Panel
 
         // Setup CommandWindow properties
         this.AutoScroll = true; // Enable scrolling on CommandWindow
-        this.BackColor = Color.Blue;
+        this.BackColor = Color.FromArgb(0x2b, 0x2d, 0x31);
 
         // Create a scrollable inner panel
         _buttonPanel = new Panel();
@@ -38,9 +38,10 @@ public class CommandWindow : Panel
         Button InitializeButton(CommandLabel cmd)
         {
             Button button = new Button();
-            button.BackColor = Color.AliceBlue;
+            button.BackColor = Color.FromArgb(0x60, 0xcc, 0x35);
             button.Text = cmd.ToString();
             button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
             button.Location = buttonLocation;
             button.Click += ButtonClicked;
             button.Tag = cmd;

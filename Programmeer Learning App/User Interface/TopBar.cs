@@ -10,7 +10,7 @@ public class TopBar : Label
 
     public TopBar(GameWindow gameWindow)
     {
-        this.BackColor = Color.LightGray;
+        this.BackColor = Color.FromArgb(0x1e, 0x1f, 0x22);
         this.Height = 30;
         this.Dock = DockStyle.Top;
 
@@ -25,7 +25,7 @@ public class TopBar : Label
         {
             Button button = new Button();
             button.FlatStyle = FlatStyle.Flat;
-            button.BackColor = Color.Gray;
+            button.BackColor = Color.FromArgb(0x31, 0x82, 0x33);
             button.Text = buttonName;
             button.Size = _buttonSize;
             button.Location = ButtonOffsetRight();

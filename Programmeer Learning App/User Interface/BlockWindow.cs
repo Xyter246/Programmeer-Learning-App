@@ -11,7 +11,7 @@ public class BlockWindow : Panel
 
     public BlockWindow()
     {
-        this.BackColor = Color.Pink;
+        this.BackColor = Color.FromArgb(0x31, 0x33, 0x38);
         this.AutoScroll = true;
 
         // Initialize the inner panel for command labels

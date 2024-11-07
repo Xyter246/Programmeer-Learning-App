@@ -8,7 +8,7 @@ public abstract class CommandLabel : Label
     {
         this.Text = this.ToString();
         this.Size = new Size(80, 30);
-        this.BackColor = Color.White;
+        this.BackColor = Color.FromArgb(0x60, 0xcc, 0x35);
     }
 
     public abstract Command ConvertLabel();

@@ -43,7 +43,7 @@ public class RunWindow : Panel
 
         for (int x = 0; x < gridSize.Width; x++)
             for (int y = 0; y > -gridSize.Height; y--) {
-                Brush boxColor = (x + y) % 2 == 0 ? Brushes.Green : Brushes.GreenYellow;
+                Brush boxColor = (x + y) % 2 == 0 ? new SolidBrush(Color.FromArgb(0x60, 0xcc, 0x35)) : new SolidBrush(Color.FromArgb(0x31, 0x82, 0x33));
                 gr.FillRectangle(boxColor, x * boxSize.Width, -y * boxSize.Height, boxSize.Width, boxSize.Height);
                 gr.DrawRectangle(Pens.Black, x * boxSize.Width, -y * boxSize.Height, boxSize.Width - boxSize.Width / 100, boxSize.Height - boxSize.Height / 100);
             }
