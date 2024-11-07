@@ -292,6 +292,7 @@ public class BlockWindow : Panel
 
         _commandList = labels ?? throw new ArgumentNullException();
         UpdateScreen();
+        return;
 
         void addList(List<CommandLabel> labels)
         {
@@ -303,8 +304,8 @@ public class BlockWindow : Panel
                 cmdLabel.MouseEnter += OnHover;
                 cmdLabel.Click += RemoveCommand;
 
-                if (cmdLabel is RepeatCommandLabel rptLabel) {
-                    addList(rptLabel.CommandLabels);
+                if (cmdLabel is LoopCommandLabel loopLabel) {
+                    addList(loopLabel.CommandLabels);
                 }
             }
         }

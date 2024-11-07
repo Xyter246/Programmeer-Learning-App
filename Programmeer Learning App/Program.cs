@@ -3,7 +3,8 @@
 public class Program
 {
     public List<Command> Commands;
-    public bool HasEnded => _currentIndex >= this.Commands.Count;
+    private List<Command> _concatCommands = new List<Command>();
+    public bool HasEnded => _currentIndex >= this._concatCommands.Count;
     private int _currentIndex;
 
     public Program(List<Command> commands)
@@ -19,8 +20,8 @@ public class Program
     /// <param name="player">The Player instance which gets updated.</param>
     public void StepOnce(Player player)
     {
-        if (!HasEnded)
-            Commands[_currentIndex++].Execute(player);
+        if (HasEnded) return;
+        _concatCommands[_currentIndex++].Execute(player);
     }
 
     /// <summary>
@@ -30,6 +31,29 @@ public class Program
     public void ResetProgram()
     {
         _currentIndex = 0;
+        _concatCommands.Clear();
+    }
+
+    public void InitializeProgram()
+    {
+        ResetProgram();
+        _concatCommands = convertList(Commands);
+        return;
+
+        List<Command> convertList(List<Command> commands)
+        {
+            List<Command> resultCommands = new List<Command>();
+            foreach (Command command in commands) {
+                if (command is RepeatCommand rptcmd) {
+                    Command[] repeatCommandArray = convertList(rptcmd.Commands).ToArray();
+                    for (int i = 0; i < rptcmd.RepeatCount; i++)
+                        resultCommands.AddRange(repeatCommandArray);
+                }
+                else resultCommands.Add(command);
+            }
+
+            return resultCommands;
+        }
     }
 
     public void Add(Command command)

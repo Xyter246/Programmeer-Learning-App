@@ -92,8 +92,10 @@ public class RunWindow : Panel
         const int bufferSize = 5;
         Point[] playerPolygon = CalcPlayerPolygon(_player.FacingDir);
         Point playerOffset = new Point(_player.Pos.X * _boxSize.Width, -_player.Pos.Y * _boxSize.Height);
-        
-        gr.FillPolygon(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), playerPolygon.Select(p => p with {X = p.X + playerOffset.X, Y = p.Y + playerOffset.Y}).ToArray());
+
+        Point[] playerPoints = playerPolygon.Select(p => p with { X = p.X + playerOffset.X, Y = p.Y + playerOffset.Y }).ToArray();
+        gr.FillPolygon(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), playerPoints);
+        gr.DrawPolygon(new Pen(Color.FromArgb(0x67, 0x69, 0x71)), playerPoints);
         return;
 
         Point[] CalcPlayerPolygon(CardinalDir cardDir)
@@ -144,7 +146,7 @@ public class RunWindow : Panel
 
     private void DrawEndPoint(Graphics gr, Point location)
     {
-        gr.FillEllipse(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), location.X * _boxSize.Width, location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
+        gr.FillEllipse(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), location.X * _boxSize.Width, -location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
     }
 
     public void OnResize(object? o, EventArgs? ea)
@@ -165,18 +167,25 @@ public class RunWindow : Panel
     public async void Run(Program program)
     {
         ResetRun();
+        program.InitializeProgram();
         _forceStop = false;
         while (!program.HasEnded && ! _forceStop) {
             await Task.Delay(_programStepDelay);
             if (!_forceStop) {
                 program.StepOnce(_player);
+                if (_exercise?.Grid[_player.Pos.X, -_player.Pos.Y] is Blockade) {
+                    ResetRun();
+                    MessageBox.Show(@"It seems you have run into a wall", @"Error");
+                }
                 _tracerPoints.Add(_player.Pos);
             }
             this.Invalidate();
         }
-        if (_exercise != null && _exercise.IsCompleted(_player))
-            _exercise.OnSuccess();
         RunHasFinished = true;
+
+        if (_exercise == null || !_exercise.IsCompleted(_player)) return;
+        _exercise.OnSuccess();
+        ResetRun();
     }
 
     public void ResetRun()
