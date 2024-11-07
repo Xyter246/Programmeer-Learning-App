@@ -98,10 +98,7 @@ public class GameWindow : Form
         while (!sr.EndOfStream)
             lines.Add(sr.ReadLine()!);
 
-        Controls.Remove(_runWindow);
-        _runWindow = new RunWindow(PathFindingExercise.Generate(lines.ToArray()));
-        _runWindow.Location = new Point(0, UsableStartLocation);
-        Controls.Add(_runWindow);
-        _runWindow.Invalidate();
+        _runWindow.SetExercise(PathFindingExercise.Generate(lines.ToArray()));
+
     }
 }

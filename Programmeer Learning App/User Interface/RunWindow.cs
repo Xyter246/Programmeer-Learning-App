@@ -7,23 +7,11 @@ public class RunWindow : Panel
     public bool RunHasFinished = true;
     private bool _forceStop = true;
     private const int _programStepDelay = 200; // in milliseconds
-    private readonly Exercise? _exercise;
+    private Exercise? _exercise;
     private Player _player;
     private readonly Size _baseSize = new Size(5, 5);
     private Size _gridSize;
     private Size _boxSize;
-
-    public RunWindow(Exercise exercise)
-    {
-        _exercise = exercise;
-        _player = (Player)_exercise.Player.Clone();
-        ChangeSize();
-
-        this.Paint += _exercise switch {
-            PathFindingExercise => DrawExercise,
-            _ => DrawWorld
-        };
-    }
 
     public RunWindow()
     {
@@ -35,11 +23,23 @@ public class RunWindow : Panel
         this.Paint += DrawWorld;
     }
 
+    public void SetExercise(Exercise exercise)
+    {
+        _exercise = exercise;
+        _player = (Player)_exercise.Player.Clone();
+        ChangeSize();
+
+        this.Paint += DrawExercise;
+        Invalidate();
+    }
+
     private void DrawExercise(object? o, PaintEventArgs pea)
     {
-        PathFindingExercise pfe = (PathFindingExercise)_exercise!;
         DrawWorld(o, pea);
         DrawEntities(pea.Graphics);
+
+        if (_exercise is PathFindingExercise pfe) 
+            DrawEndPoint(pea.Graphics, pfe.EndPoint);
     }
 
     private void DrawWorld(object? o, PaintEventArgs pea)
@@ -101,8 +101,6 @@ public class RunWindow : Panel
                 switch (_exercise!.Grid[x, -y]) {
                     case Blockade: DrawBlockade(gr, new Point(x, y));
                         break;
-                    case EndPoint: DrawEndPoint(gr, new Point(x, y));
-                        break;
                     default: continue;
                 }
             }
@@ -115,7 +113,7 @@ public class RunWindow : Panel
 
     private void DrawEndPoint(Graphics gr, Point location)
     {
-
+        gr.FillEllipse(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), location.X * _boxSize.Width, location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
     }
 
     public void OnResize(object? o, EventArgs? ea)

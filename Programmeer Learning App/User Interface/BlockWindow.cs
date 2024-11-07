@@ -32,9 +32,21 @@ public class BlockWindow : Panel
     public void AddCommand(CommandLabel cmdLabel)
     {
         this.Resize += cmdLabel.OnResize;
+
         cmdLabel.OnResize(this, null);
+
         cmdLabel.MouseEnter += OnHover;
+        cmdLabel.Click += RemoveCommand;
+
         _commandList.Add(cmdLabel);
+
+        UpdateScreen();
+    }
+
+    public void RemoveCommand(object? o, EventArgs ea)
+    {
+        if (o is not CommandLabel cmdLabel) return;
+        _commandList.Remove(cmdLabel);
         UpdateScreen();
     }
 
