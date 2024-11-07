@@ -20,6 +20,5 @@ public class TurnCommand : Command
         => Enum.TryParse(words[1], out RelativeDir relDir) ? new TurnCommand(relDir) : null;
 
     public override CommandLabel ToLabel()
-    // Constructor of TurnCommandLabel doesn't convert input properly
         => new TurnCommandLabel(TurnDir);
 }

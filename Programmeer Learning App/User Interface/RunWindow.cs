@@ -182,13 +182,21 @@ public class RunWindow : Panel
 
         program.InitializeProgram();
         _forceStop = false;
-        while (!program.HasEnded && ! _forceStop) {
+        while (!program.HasEnded && !_forceStop) {
             await Task.Delay(_programStepDelay);
             if (!_forceStop) {
                 program.StepOnce(_player);
-                if (_exercise?.Grid[_player.Pos.X, -_player.Pos.Y] is Blockade) {
+
+                if (IsPlayerOutOfBounds(_player)) {
+                    MessageBox.Show($@"It seems you have walked out of bounds at {_player.Pos}", @"Error");
                     ResetRun();
-                    MessageBox.Show(@"It seems you have run into a wall", @"Error");
+                    break;
+                }
+
+                if (_exercise?.Grid[_player.Pos.X, -_player.Pos.Y]?.GetType() == typeof(Blockade)) {
+                    MessageBox.Show($@"It seems you have run into a wall at {_player.Pos}", @"Error");
+                    ResetRun();
+                    break;
                 }
                 _tracerPoints.Add(_player.Pos);
             }
@@ -199,6 +207,11 @@ public class RunWindow : Panel
         if (_exercise == null || !_exercise.IsCompleted(_player)) return;
         _exercise.OnSuccess();
         ResetRun();
+        return;
+
+        bool IsPlayerOutOfBounds(Player player)
+            => player.Pos.X < 0 || player.Pos.X > _exercise?.Grid.GetLength(0) 
+            || player.Pos.Y > 0 || player.Pos.Y < -_exercise?.Grid.GetLength(1);
     }
 
     public void ResetRun()
