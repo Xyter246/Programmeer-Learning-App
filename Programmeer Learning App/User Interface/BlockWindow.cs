@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using Programmeer_Learning_App.User_Interface.CommandLabels;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Programmeer_Learning_App.User_Interface;
 
@@ -32,10 +33,36 @@ public class BlockWindow : Panel
     public void AddCommand(CommandLabel cmdLabel)
     {
         this.Resize += cmdLabel.OnResize;
+
         cmdLabel.OnResize(this, null);
+
         cmdLabel.MouseEnter += OnHover;
+        cmdLabel.Click += RemoveCommand;
+
         _commandList.Add(cmdLabel);
+
         UpdateScreen();
+    }
+
+    public void RemoveCommand(object? o, EventArgs ea)
+    {
+        if (o is not CommandLabel cmdLabel) return;
+
+        FindLabel(_commandList, cmdLabel);
+
+        UpdateScreen();
+
+        void FindLabel(List<CommandLabel> commandList, CommandLabel cmdLabel)
+        {
+            for (int i = 0; i < commandList.Count; i++) {
+                if (commandList[i] == cmdLabel) {
+                    commandList.RemoveAt(i);
+                } else if (commandList[i] is LoopCommandLabel loopCmd) {
+                    // Recursive check within nested loops
+                    FindLabel(loopCmd.CommandLabels, cmdLabel);
+                }
+            }
+        }
     }
 
     // Method to remove a command label by command reference
@@ -146,6 +173,8 @@ public class BlockWindow : Panel
     {
         if (o is not CommandLabel cmdLabel) return;
 
+        cmdLabel.BackColor = Color.FromArgb(0xda, 0x37, 0x3c);
+
         // Create the panels for the up and down triangles
         Panel upArrow = CreateTriangleBox(true);
         Panel downArrow = CreateTriangleBox(false);
@@ -185,6 +214,9 @@ public class BlockWindow : Panel
 
         void HideControls(object? sender, EventArgs e)
         {
+            if (sender is CommandLabel cmdLabel)
+                cmdLabel.BackColor = Color.FromArgb(0x60, 0xcc, 0x35);
+
             isHovering = false;
             Task.Delay(1).ContinueWith(_ =>
             {
