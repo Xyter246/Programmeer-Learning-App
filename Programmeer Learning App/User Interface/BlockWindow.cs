@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App.User_Interface;
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
@@ -46,17 +48,7 @@ public class BlockWindow : Panel
     // Method to re-align labels after moving a command up or down
     private void UpdatePositions(CommandLabel cmdLabel, bool moveUp)
     {
-
-        if (FindCommand(_commandList, cmdLabel, moveUp)) {
-            // If cmdLabel is moved out of a loop list and needs to move outside the parent, position it in the main list
-            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel label && label.CommandLabels.Contains(cmdLabel));
-            if (parentIndex == -1) return;
-            if (moveUp) {
-                _commandList.Insert(parentIndex, cmdLabel); // Insert it above the parent loop
-            } else {
-                _commandList.Insert(parentIndex + 1, cmdLabel); // Insert it below the parent loop
-            }
-        }
+        FindCommand(_commandList, cmdLabel, moveUp);
 
         // Refresh display after reordering
         UpdateScreen();
@@ -88,6 +80,7 @@ public class BlockWindow : Panel
         if (moveUp) {
             if (index == 0) // Move cmdLabel out of this loop and set it to be placed above parent
             {
+                if (commandLabels == _commandList) return false; // If there is no parent we dont do anything
                 commandLabels.RemoveAt(index);
                 return true;
             } else if (commandLabels[index - 1] is LoopCommandLabel nestedLoop) {
@@ -104,6 +97,7 @@ public class BlockWindow : Panel
         } else { // moving down
             if (index == commandLabels.Count - 1) // Move cmdLabel out of this loop and set it to be placed below parent
             {
+                if (commandLabels == _commandList) return false; // If there is no parent we dont do anything
                 commandLabels.RemoveAt(index);
                 return true;
             } else if (commandLabels[index + 1] is LoopCommandLabel nestedLoop) {
@@ -161,12 +155,16 @@ public class BlockWindow : Panel
         upArrow.Click += (sender, e) => {
             if (sender is Panel panel)
                 UpdatePositions(cmdLabel, true);
+            upArrow.Visible = false; // the mouse will hit a new label within a millisecond, therefore the old arrows wont be hidden
+            downArrow.Visible = false;
         };
 
         // Move the command down in the list
         downArrow.Click += (sender, e) => {
             if (sender is Panel panel)
                 UpdatePositions(cmdLabel, false);
+            upArrow.Visible = false; // the mouse will hit a new label within a millisecond, therefore the old arrows wont be hidden
+            downArrow.Visible = false;
         };
 
         // Add the boxes to the label's parent container so they overlay correctly
