@@ -180,6 +180,8 @@ public class RunWindow : Panel
             this.Invalidate();
         }
 
+        _tracerPoints.Add(_player.Pos);
+
         program.InitializeProgram();
         _forceStop = false;
         while (!program.HasEnded && !_forceStop) {
@@ -218,7 +220,6 @@ public class RunWindow : Panel
     {
         _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
         _tracerPoints.Clear();
-        _tracerPoints.Add(_player.Pos);
         _forceStop = true;
         this.Invalidate();
     }
