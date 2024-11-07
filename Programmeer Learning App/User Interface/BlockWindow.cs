@@ -290,7 +290,27 @@ public class BlockWindow : Panel
 
     public void AddProgram(List<CommandLabel>? labels)
     {
+        if (labels == null) return;
+
+        addList(labels);
+
         _commandList = labels ?? throw new ArgumentNullException();
         UpdateScreen();
+
+        void addList(List<CommandLabel> labels)
+        {
+            foreach (CommandLabel cmdLabel in labels) {
+                this.Resize += cmdLabel.OnResize;
+
+                cmdLabel.OnResize(this, null);
+
+                cmdLabel.MouseEnter += OnHover;
+                cmdLabel.Click += RemoveCommand;
+
+                if (cmdLabel is RepeatCommandLabel rptLabel) {
+                    addList(rptLabel.CommandLabels);
+                }
+            }
+        }
     }
 }
