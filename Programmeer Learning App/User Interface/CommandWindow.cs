@@ -77,7 +77,5 @@ public class CommandWindow : Panel
                 break;
             default: return;
         }
-
-        // _blockWindow.AddCommand((CommandLabel)button.Tag!); // We can cast because all buttons are made in the same InitializeButton method
     }
 }
