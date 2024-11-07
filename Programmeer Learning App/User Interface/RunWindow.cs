@@ -20,22 +20,31 @@ public class RunWindow : Panel
         _exercise = null;
         _player = Player.Empty;
 
-        ChangeSize();
+        ChangeGrid();
 
         this.Paint += DrawWorld;
     }
 
+    /// <summary>
+    /// Sets the current Exercise that the User will try.
+    /// </summary>
+    /// <param name="exercise">An instance of Exercise.</param>
     public void SetExercise(Exercise exercise)
     {
         _exercise = exercise;
         _player = (Player)_exercise.Player.Clone();
-        ChangeSize();
+        ChangeGrid();
 
         this.Paint += DrawExercise;
         ResetRun();
         Invalidate();
     }
 
+    /// <summary>
+    /// Draw a representation of the current Exercise instance.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="pea"></param>
     private void DrawExercise(object? o, PaintEventArgs pea)
     {
         DrawWorld(o, pea);
@@ -43,8 +52,18 @@ public class RunWindow : Panel
 
         if (_exercise is PathFindingExercise pfe) 
             DrawEndPoint(pea.Graphics, pfe.EndPoint);
+        return;
+
+        void DrawEndPoint(Graphics gr, Point location) 
+            => gr.FillEllipse(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), 
+                location.X * _boxSize.Width, -location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
     }
 
+    /// <summary>
+    /// Draws the current state of the Player and World.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="pea"></param>
     private void DrawWorld(object? o, PaintEventArgs pea)
     {
         Graphics gr = pea.Graphics;
@@ -60,6 +79,10 @@ public class RunWindow : Panel
         DrawPlayer(gr);
     }
 
+    /// <summary>
+    /// Draws the Path trailing behind a Player.
+    /// </summary>
+    /// <param name="gr"></param>
     private void DrawPath(Graphics gr)
     {
         int tracerwidth = 10;
@@ -87,6 +110,10 @@ public class RunWindow : Panel
             => new Point(p.X * _boxSize.Width + _boxSize.Width / 2, p.Y * _boxSize.Height + _boxSize.Height / 2);
     }
 
+    /// <summary>
+    /// Draws the Player instance.
+    /// </summary>
+    /// <param name="gr"></param>
     private void DrawPlayer(Graphics gr)
     {
         const int bufferSize = 5;
@@ -127,6 +154,10 @@ public class RunWindow : Panel
         }
     }
 
+    /// <summary>
+    /// Draw any Entities involved in an Exercise.
+    /// </summary>
+    /// <param name="gr"></param>
     private void DrawEntities(Graphics gr)
     {
         for (int x = 0; x < _gridSize.Width; x++)
@@ -137,37 +168,44 @@ public class RunWindow : Panel
                     default: continue;
                 }
             }
+        return;
+
+        void DrawBlockade(Graphics g, Point location) 
+            => g.FillRectangle(new SolidBrush(Color.FromArgb(0xda, 0x37, 0x3c)), 
+                location.X * _boxSize.Width, -location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
     }
 
-    private void DrawBlockade(Graphics gr, Point location)
-    {
-        gr.FillRectangle(new SolidBrush(Color.FromArgb(0xda, 0x37, 0x3c)), location.X * _boxSize.Width, -location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
-    }
-
-    private void DrawEndPoint(Graphics gr, Point location)
-    {
-        gr.FillEllipse(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), location.X * _boxSize.Width, -location.Y * _boxSize.Height, _boxSize.Width, _boxSize.Height);
-    }
-
+    /// <summary>
+    /// Determines how to draw this Panel upon a Resize.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="ea"></param>
     public void OnResize(object? o, EventArgs? ea)
     {
         if (o is not GameWindow gamewindow) return;
         this.Size = new Size((gamewindow.Size.Width / 2) - 16, gamewindow.UsableHeight);
         this.Location = new Point(gamewindow.Width / 2, gamewindow.UsableStartLocation);
-        ChangeSize();
+        ChangeGrid();
         this.Invalidate();
     }
 
-    private void ChangeSize()
+    /// <summary>
+    /// Changes the values of the Grid.
+    /// </summary>
+    private void ChangeGrid()
     {
         _gridSize = _exercise?.GridSize ?? _baseSize;
         _boxSize = new Size(this.Width / _gridSize.Width, this.Height / _gridSize.Height);
     }
 
+    /// <summary>
+    /// Runs a Program instance on the Player instance in the current World.
+    /// </summary>
+    /// <param name="program">A Program instance.</param>
     public async void Run(Program program)
     {
         ResetRun();
-        program.InitializeProgram();
+        program.Initialize();
         _forceStop = false;
         while (!program.HasEnded && !_forceStop) {
             await Task.Delay(_programStepDelay);
@@ -180,7 +218,7 @@ public class RunWindow : Panel
                     break;
                 }
 
-                if (_exercise?.Grid[_player.Pos.X, -_player.Pos.Y]?.GetType() == typeof(Blockade)) {
+                if (_exercise?.Grid[_player.Pos.X, -_player.Pos.Y] is Blockade) {
                     MessageBox.Show($@"It seems you have run into a wall at {_player.Pos}", @"Error");
                     ResetRun();
                     break;
@@ -201,6 +239,9 @@ public class RunWindow : Panel
             || player.Pos.Y > 0 || player.Pos.Y < -_exercise?.Grid.GetLength(1);
     }
 
+    /// <summary>
+    /// Reset the State back to the start.
+    /// </summary>
     public void ResetRun()
     {
         _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();

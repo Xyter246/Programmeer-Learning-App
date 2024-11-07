@@ -15,7 +15,10 @@ public class TurnCommandLabel : CommandLabel
 
     public TurnCommandLabel(RelativeDir relDir) : this()
     {
-        _cbb.SelectedItem = relDir; // Doesn't function properly
+        // Comboboxes don't realise that they have a (new) Datasource instance so we must select the value asynchronously in order to set the combobox value at all.
+        Task.Delay(1).ContinueWith(_ => {
+            _cbb.SelectedItem = relDir;
+        }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
     public override Command ConvertLabel()

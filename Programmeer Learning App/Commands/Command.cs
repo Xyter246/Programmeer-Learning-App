@@ -4,10 +4,13 @@ namespace Programmeer_Learning_App.Commands;
 
 public abstract class Command
 {
+    /// <summary>
+    /// The Name of the Command, in short hand
+    /// </summary>
     public virtual string Name => ToString().Split(' ')[0];
 
     /// <summary>
-    /// Executes the corresponding command upon a Player instance
+    /// Executes the Command upon a given Player instance.
     /// </summary>
     /// <param name="player">The player which executes the command.</param>
     public abstract void Execute(Player player);

@@ -1,7 +1,4 @@
-﻿using Programmeer_Learning_App.User_Interface.CommandLabels;
-using System.Reflection.Metadata.Ecma335;
-
-namespace Programmeer_Learning_App.User_Interface;
+﻿namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
@@ -29,18 +26,20 @@ public class BlockWindow : Panel
         _commandList = new List<CommandLabel>();
     }
 
-    // Method to add a new command label to the panel
+    /// <summary>
+    /// Method to add a new command label to the panel
+    /// </summary>
+    /// <param name="cmdLabel">Which CommandLabel to add.</param>
     public void AddCommand(CommandLabel cmdLabel)
     {
+        cmdLabel.Location = new Point(10, 0);
         this.Resize += cmdLabel.OnResize;
-
         cmdLabel.OnResize(this, null);
 
         cmdLabel.MouseEnter += OnHover;
         cmdLabel.Click += RemoveCommand;
 
         _commandList.Add(cmdLabel);
-
         UpdateScreen();
     }
 
@@ -51,36 +50,48 @@ public class BlockWindow : Panel
         FindLabel(_commandList, cmdLabel);
 
         UpdateScreen();
+        return;
 
-        void FindLabel(List<CommandLabel> commandList, CommandLabel cmdLabel)
+        void FindLabel(List<CommandLabel> commandList, CommandLabel cmndLabel)
         {
-            for (int i = 0; i < commandList.Count; i++) {
-                if (commandList[i] == cmdLabel) {
+            // Checks Depth-First-Search along all CommandLabels if it can find the one it seeks.
+            for (int i = 0; i < commandList.Count; i++)
+                if (commandList[i] == cmndLabel) {
                     commandList.RemoveAt(i);
                 } else if (commandList[i] is LoopCommandLabel loopCmd) {
                     // Recursive check within nested loops
-                    FindLabel(loopCmd.CommandLabels, cmdLabel);
+                    FindLabel(loopCmd.CommandLabels, cmndLabel);
                 }
-            }
         }
     }
 
-    // Method to remove a command label by command reference
+    /// <summary>
+    /// Method to remove a command label by command reference
+    /// </summary>
     public void ClearCommands()
     {
         _commandList.Clear();
         UpdateScreen();
     }
 
-    // Method to re-align labels after moving a command up or down
+    /// <summary>
+    /// Method to re-align labels after moving a command up or down
+    /// </summary>
+    /// <param name="cmdLabel">What CommandLabel to update.</param>
+    /// <param name="moveUp">Which direction it must go.</param>
     private void UpdatePositions(CommandLabel cmdLabel, bool moveUp)
     {
         FindCommand(_commandList, cmdLabel, moveUp);
-
-        // Refresh display after reordering
         UpdateScreen();
     }
 
+    /// <summary>
+    /// Finds a command recusively in a list and moves command accordingly.
+    /// </summary>
+    /// <param name="commandLabels"></param>
+    /// <param name="cmdLabel"></param>
+    /// <param name="moveUp"></param>
+    /// <returns>True if command has been found and needs to be moved into a parent list.</returns>
     private bool FindCommand(List<CommandLabel> commandLabels, CommandLabel cmdLabel, bool moveUp)
     {
         for (int i = 0; i < commandLabels.Count; i++) {
@@ -101,6 +112,14 @@ public class BlockWindow : Panel
         return false; // If not found within the nested loop, return false
     }
 
+    /// <summary>
+    /// Moves the label up or down depending on parameters.
+    /// </summary>
+    /// <param name="commandLabels"></param>
+    /// <param name="cmdLabel"></param>
+    /// <param name="index"></param>
+    /// <param name="moveUp"></param>
+    /// <returns>True if command needs to be moved into a parent list.</returns>
     private bool MoveCommand(List<CommandLabel> commandLabels, CommandLabel cmdLabel, int index, bool moveUp)
     {
         if (moveUp) {
@@ -140,14 +159,20 @@ public class BlockWindow : Panel
         }
     }
 
+    /// <summary>
+    /// Updates the Screen to reflect the current situation.
+    /// </summary>
     private void UpdateScreen()
     {
+        // Clears all CommandLabels.
         _blockPanel.Controls.Clear();
         Point startingLabelLocation = new Point(10, 10);
 
+        // Draws all new CommandLabels within this function.
         DrawCommandLabels(_commandList, ref startingLabelLocation);
         return;
 
+        // Draw a List of CommandLabels recursively until all CommandLabels have been redrawn.
         void DrawCommandLabels(List<CommandLabel> CommandLabels, ref Point labelLocation)
         {
             foreach (CommandLabel cmd in CommandLabels) {
@@ -163,12 +188,12 @@ public class BlockWindow : Panel
         }
     }
 
-    private void CommandLabel_Click(object? o, EventArgs ea)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void OnHover(object? o, EventArgs ea)
+    /// <summary>
+    /// Event Handler for CommandLabels for what to do if the Mouse hovers over it.
+    /// </summary>
+    /// <param name="o">Calling object.</param>
+    /// <param name="ea">Empty EventArgs</param>
+    private void OnHover(object? o, EventArgs? ea)
     {
         if (o is not CommandLabel cmdLabel) return;
 
@@ -203,17 +228,25 @@ public class BlockWindow : Panel
 
         ShowControls(o, ea);
 
-        void ShowControls(object? sender, EventArgs e)
+        // Attach events to both the label and the triangles/panels
+        cmdLabel.MouseLeave += HideControls;
+        upArrow.MouseEnter += ShowControls;
+        upArrow.MouseLeave += HideControls;
+        downArrow.MouseEnter += ShowControls;
+        downArrow.MouseLeave += HideControls;
+        return;
+
+        void ShowControls(object? sender, EventArgs? e)
         {
             isHovering = true;
             upArrow.Visible = true;
             downArrow.Visible = true;
         }
 
-        void HideControls(object? sender, EventArgs e)
+        void HideControls(object? sender, EventArgs? e)
         {
-            if (sender is CommandLabel cmdLabel)
-                cmdLabel.BackColor = Color.FromArgb(0x60, 0xcc, 0x35);
+            if (sender is CommandLabel cmndLabel)
+                cmndLabel.BackColor = Color.FromArgb(0x60, 0xcc, 0x35);
 
             isHovering = false;
             Task.Delay(1).ContinueWith(_ => {
@@ -223,56 +256,51 @@ public class BlockWindow : Panel
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        // Attach events to both the label and the triangles/panels
-        cmdLabel.MouseLeave += HideControls;
-        upArrow.MouseEnter += ShowControls;
-        upArrow.MouseLeave += HideControls;
-        downArrow.MouseEnter += ShowControls;
-        downArrow.MouseLeave += HideControls;
+        Panel CreateTriangleBox(bool isUp)
+        {
+            Panel box = new Panel {
+                Size = new Size(20, 10), // Small size for the triangle box
+                BackColor = Color.Transparent, // Set transparent so only the triangle shows
+                Visible = false, // Initially hidden
+            };
+
+            box.Paint += (_, e) => {
+                Point[] trianglePoints;
+                if (isUp) {
+                    trianglePoints = new[] {
+                        new Point(box.Width / 2, 0),
+                        new Point(0, box.Height),
+                        new Point(box.Width, box.Height)
+                    };
+                } else {
+                    trianglePoints = new[] {
+                        new Point(0, 0),
+                        new Point(box.Width, 0),
+                        new Point(box.Width / 2, box.Height)
+                    };
+                }
+                e.Graphics.FillPolygon(Brushes.Black, trianglePoints);
+            };
+            return box;
+        }
+
+        void PositionBoxes(CommandLabel cmndLabel, Panel upBox, Panel downBox)
+        {
+            int centerX = (cmndLabel.Width - upBox.Width) / 2;
+            int topY = cmndLabel.Height / 4 - upBox.Height / 2;
+            int bottomY = (3 * cmndLabel.Height) / 4 - downBox.Height / 2;
+
+            upBox.Location = new Point(centerX, topY);
+            downBox.Location = new Point(centerX, bottomY);
+        }
     }
 
-    private Panel CreateTriangleBox(bool isUp)
-    {
-        Panel box = new Panel {
-            Size = new Size(20, 10), // Small size for the triangle box
-            BackColor = Color.Transparent, // Set transparent so only the triangle shows
-            Visible = false, // Initially hidden
-        };
-
-        box.Paint += (sender, e) => {
-            Point[] trianglePoints;
-            if (isUp) {
-                trianglePoints = new[]
-                {
-                    new Point(box.Width / 2, 0),
-                    new Point(0, box.Height),
-                    new Point(box.Width, box.Height)
-                };
-            } else {
-                trianglePoints = new[]
-                {
-                    new Point(0, 0),
-                    new Point(box.Width, 0),
-                    new Point(box.Width / 2, box.Height)
-                };
-            }
-
-            e.Graphics.FillPolygon(Brushes.Black, trianglePoints);
-        };
-
-        return box;
-    }
-
-    private void PositionBoxes(CommandLabel cmdLabel, Panel upBox, Panel downBox)
-    {
-        int centerX = (cmdLabel.Width - upBox.Width) / 2;
-        int topY = cmdLabel.Height / 4 - upBox.Height / 2;
-        int bottomY = (3 * cmdLabel.Height) / 4 - downBox.Height / 2;
-
-        upBox.Location = new Point(centerX, topY);
-        downBox.Location = new Point(centerX, bottomY);
-    }
-
+    /// <summary>
+    /// Resizes this instance upon a Window Resize.s
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="ea"></param>
+    /// <param name="cmdWindowWidth"></param>
     public void OnResize(object? o, EventArgs? ea, int cmdWindowWidth)
     {
         if (o is not GameWindow gamewindow) return;
@@ -281,22 +309,29 @@ public class BlockWindow : Panel
         this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
     }
 
+    /// <summary>
+    /// Converts a List of CommandLabels to a useable Program instance.
+    /// </summary>
+    /// <returns>A Program instance.</returns>
     public Program Program() 
         => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
 
-    public void AddProgram(List<CommandLabel>? labels)
+    /// <summary>
+    /// Sets the current Commands to that of a List of CommandLabels, most likely converted from a IFileReader instance.
+    /// </summary>
+    /// <param name="labels">A list of CommandLabels.</param>
+    public void SetProgram(List<CommandLabel>? labels)
     {
         if (labels == null) return;
 
+        _commandList = labels;
         addList(labels);
-
-        _commandList = labels ?? throw new ArgumentNullException();
         UpdateScreen();
         return;
 
-        void addList(List<CommandLabel> labels)
+        void addList(List<CommandLabel> cmdLabels)
         {
-            foreach (CommandLabel cmdLabel in labels) {
+            foreach (CommandLabel cmdLabel in cmdLabels) {
                 this.Resize += cmdLabel.OnResize;
 
                 cmdLabel.OnResize(this, null);

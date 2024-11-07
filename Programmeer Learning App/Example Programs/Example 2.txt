@@ -1,5 +1,5 @@
-MoveCommand 3
-TurnCommand Left
-RepeatCommand 3
-	MoveCommand 2
-	TurnCommand Right
+Move 3
+Turn Right
+Repeat 3
+	Move 2
+	Turn Right

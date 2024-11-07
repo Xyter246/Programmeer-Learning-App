@@ -13,7 +13,15 @@ public abstract class Exercise
         Player = Player.Empty;
     }
 
+    /// <summary>
+    /// Determines if an Exercises is completed by an instance of a Player.
+    /// </summary>
+    /// <param name="player">A Player instance.</param>
+    /// <returns>True if Player fulfills all requirements, otherwise False.</returns>
     public abstract bool IsCompleted(Player player);
 
+    /// <summary>
+    /// Determines what should happen if the Exercise has been completed.
+    /// </summary>
     public abstract void OnSuccess();
 }

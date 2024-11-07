@@ -9,6 +9,11 @@ public static class CommandFactory
         {"RepeatUntil", (words) => new RepeatUntilCommand((Player p) => false).FromString(words)}
     };
 
+    /// <summary>
+    /// Creates an instance from an array of strings.
+    /// </summary>
+    /// <param name="words">Array of strings, in certain order</param>
+    /// <returns>An instance of Command, created from the argument. Or null if the argument does not match expected format.</returns>
     public static Command? CreateInstance(string[] words)
         => commandMap.ContainsKey(words[0]) ? commandMap[words[0]].Invoke(words) : null;
 }

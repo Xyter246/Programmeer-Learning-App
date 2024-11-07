@@ -11,12 +11,13 @@ public class GameWindow : Form
     {
         Console.WriteLine(@"Starting up...");
         Application.Run(new GameWindow());
+        Console.WriteLine(@"Exiting app...");
     }
 
     private readonly CommandWindow _cmdWindow;
     private readonly BlockWindow _blockWindow;
     private readonly TopBar _topBar;
-    private RunWindow _runWindow;
+    private readonly RunWindow _runWindow;
     private bool _running => !this._runWindow.RunHasFinished;
 
     public int UsableHeight;
@@ -58,6 +59,14 @@ public class GameWindow : Form
         this.OnResize(null, null);
     }
 
+    /// <summary>
+    /// Shows an Error in the form of a MessageBox to the User.
+    /// </summary>
+    /// <param name="message">What message it should say.</param>
+    /// <param name="caption">The 'title' of the MessageBox, Default = "Error"</param>
+    public static void ShowError(string message, string caption = "Error")
+        => MessageBox.Show(message, caption);
+
     private void OnResize(object? o, EventArgs? ea)
     {
         this.UsableHeight = ClientSize.Height - _topBar.Height;
@@ -83,8 +92,7 @@ public class GameWindow : Form
         => TXTFileWriter.WriteFile(_blockWindow.Program());
 
     public void importButton_Click(object? o, EventArgs ea)
-        // Returns an Program instance, but is unused as this function's return type is void.
-        => _blockWindow.AddProgram(TXTFileReader.Readfile());
+        => _blockWindow.SetProgram(TXTFileReader.Readfile());
 
     public void exerciseButton_Click(object? o, EventArgs ea)
     {
@@ -98,7 +106,8 @@ public class GameWindow : Form
         while (!sr.EndOfStream)
             lines.Add(sr.ReadLine()!);
 
-        PathFindingExercise pfe =  PathFindingExercise.Generate(lines.ToArray());
+        PathFindingExercise? pfe =  PathFindingExercise.Generate(lines.ToArray());
+        if (pfe is null) return;
         _runWindow.SetExercise(pfe);
         _blockWindow.ClearCommands();
     }

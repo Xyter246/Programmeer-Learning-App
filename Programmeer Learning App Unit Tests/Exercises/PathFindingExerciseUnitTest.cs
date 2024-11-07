@@ -17,9 +17,10 @@ public class PathFindingExerciseUnitTest
         };
 
         // Act
-        PathFindingExercise pfe = PathFindingExercise.Generate(game);
+        PathFindingExercise? pfe = PathFindingExercise.Generate(game);
         
         // Assert
+        Assert.NotNull(pfe);
         Assert.Equal(new Point(0, 0), pfe.Player.Pos);
         Assert.Equal(new Point(4, 4), pfe.EndPoint);
         Assert.True(NullChecker(pfe, new Point[] {
@@ -38,9 +39,21 @@ public class PathFindingExerciseUnitTest
         }));
     }
 
+    /// <summary>
+    /// Checks for null values in a PathFindingExercise from an array of Points.
+    /// </summary>
+    /// <param name="pfe"></param>
+    /// <param name="points"></param>
+    /// <returns>True if all points' values are Null, otherwise False.</returns>
     private static bool NullChecker(PathFindingExercise pfe, Point[] points)
         => points.All(p => pfe.Grid[p.X, p.Y] is null);
 
+    /// <summary>
+    /// Checks for Blockades in a PathFindingExercise from an array of Points.
+    /// </summary>
+    /// <param name="pfe"></param>
+    /// <param name="points"></param>
+    /// <returns>True if all points' values are Blockades, otherwise False.</returns>
     private static bool BlockadeChecker(PathFindingExercise pfe, Point[] points) 
         => points.All(p => pfe.Grid[p.X, p.Y]?.GetType() == typeof(Blockade));
 }

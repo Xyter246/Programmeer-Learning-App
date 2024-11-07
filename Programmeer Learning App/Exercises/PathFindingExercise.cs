@@ -1,4 +1,5 @@
 ﻿using Programmeer_Learning_App.Entities;
+using Programmeer_Learning_App.User_Interface;
 
 namespace Programmeer_Learning_App.Exercises;
 
@@ -13,8 +14,7 @@ public class PathFindingExercise : Exercise
     /// </summary>
     /// <param name="path">the string[] which contains a path the player must follow.</param>
     /// <returns>An instance of PathFindingExercise.</returns>
-    /// <exception cref="ArgumentException">If there is no EndPoint given, then this is not a valid Exercise and will throw an Exception.</exception>
-    public static PathFindingExercise Generate(string[] path)
+    public static PathFindingExercise? Generate(string[] path)
     {
         PathFindingExercise pfe = new PathFindingExercise(new Size(path[0].Length, path.Length));
         Point? playerPos = null;
@@ -39,10 +39,16 @@ public class PathFindingExercise : Exercise
                 }
             }
 
+        // Error handling
+        if (endPoint is null) {
+            GameWindow.ShowError("There was no EndPoint found whilst Generating this PathFindingExercise.\n" +
+                                 "Please add at least one 'x' to your PathFindingExercise text file.");
+            return null;
+        }
+
         // If there are multiple or no PlayerPos given, it'd be the last one iterated over or the first square (as default).
         pfe.Player = playerPos is not null ? new Player((Point)playerPos, CardinalDir.East) : Player.Empty;
-
-        pfe.EndPoint = endPoint ?? throw new ArgumentException(@"There must be an EndPoint for an Exercise.");
+        pfe.EndPoint = (Point)endPoint;
         return pfe;
     }
 

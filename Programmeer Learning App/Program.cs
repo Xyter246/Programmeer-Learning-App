@@ -26,7 +26,7 @@ public class Program
 
     /// <summary>
     /// Resets the Program back to the start.
-    /// Doesn't take into account any changes to Player instances.
+    /// Doesn't take into account any changes to the Player instance it acted upon.
     /// </summary>
     public void ResetProgram()
     {
@@ -34,7 +34,10 @@ public class Program
         _concatCommands.Clear();
     }
 
-    public void InitializeProgram()
+    /// <summary>
+    /// Initializes a Program for Running, must execute once before each time trying trying to run a Program.
+    /// </summary>
+    public void Initialize()
     {
         ResetProgram();
         _concatCommands = convertList(Commands);
@@ -55,7 +58,4 @@ public class Program
             return resultCommands;
         }
     }
-
-    public void Add(Command command)
-        => Commands.Add(command);
 }

@@ -1,6 +1,4 @@
-﻿using Programmeer_Learning_App.User_Interface.CommandLabels;
-
-namespace Programmeer_Learning_App.User_Interface;
+﻿namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
@@ -54,13 +52,22 @@ public class CommandWindow : Panel
         }
     }
 
-    // Resize handler to keep button panel within bounds
+    /// <summary>
+    /// Resize handler to keep button panel within bounds
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="ea"></param>
     public void OnResize(object? o, EventArgs? ea)
     {
         if (o is GameWindow gamewindow)
             this.Size = new Size(gamewindow.Size.Width / 4, gamewindow.UsableHeight);
     }
 
+    /// <summary>
+    /// Determines which CommandLabel to instantiate when a Button is pressed.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="ea"></param>
     private void ButtonClicked(object? o, EventArgs ea)
     {
         if (o is not Button button) return;
