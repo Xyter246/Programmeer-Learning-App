@@ -8,7 +8,7 @@ namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
-// After that we changed the code again to fit our vision of the class
+// After that we changed the code again to fit our vision of the class (and to fix it mostly ;( )
 public class BlockWindow : Panel
 {
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
