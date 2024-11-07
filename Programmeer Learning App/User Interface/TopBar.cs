@@ -17,6 +17,7 @@ public class TopBar : Label
         makeButton(@"EXPORT", gameWindow.exportButton_Click);
         makeButton(@"IMPORT", gameWindow.importButton_Click);
         makeButton(@"LEARN", gameWindow.exerciseButton_Click);
+        makeButton(@"METRICS", gameWindow.metricsButton_Click);
         return;
         
         Button makeButton(string buttonName, EventHandler eh)
