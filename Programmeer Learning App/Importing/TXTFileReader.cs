@@ -41,7 +41,7 @@ public class TXTFileReader : IFileReader
             Command? cmd = ConvertCommand(words.RemoveTabs());
 
             if (cmd is null) {
-                GameWindow.ShowError($"Text file contains invalid contents: {words}");
+                GameWindow.ShowError($"Text file contains invalid contents: {string.Concat(words)}");
                 return (null, null);
             }
 

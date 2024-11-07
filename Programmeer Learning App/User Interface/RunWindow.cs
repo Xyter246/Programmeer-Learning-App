@@ -22,7 +22,7 @@ public class RunWindow : Panel
 
         _gridSize = _baseSize;
 
-        ChangeSize();
+        ChangeGrid();
 
         this.Paint += DrawWorld;
     }
@@ -214,13 +214,13 @@ public class RunWindow : Panel
             (Point, Size) sizeTuple = program.MaxGridSize(_player);
             _gridSize = new Size(sizeTuple.Item2.Width + 1, sizeTuple.Item2.Height + 1);
             _player.Pos = new Point(-sizeTuple.Item1.X, -sizeTuple.Item1.Y);
-            ChangeSize();
+            ChangeGrid();
             this.Invalidate();
         }
 
         _tracerPoints.Add(_player.Pos);
 
-        program.InitializeProgram();
+        program.Initialize();
         _forceStop = false;
         while (!program.HasEnded && !_forceStop) {
             await Task.Delay(_programStepDelay);
@@ -228,13 +228,13 @@ public class RunWindow : Panel
                 program.StepOnce(_player);
 
                 if (IsPlayerOutOfBounds(_player)) {
-                    MessageBox.Show($@"It seems you have walked out of bounds at {_player.Pos}", @"Error");
+                    GameWindow.ShowError($@"It seems you have walked out of bounds at {_player.Pos}");
                     ResetRun();
                     break;
                 }
 
                 if (_exercise?.Grid[_player.Pos.X, -_player.Pos.Y] is Blockade) {
-                    MessageBox.Show($@"It seems you have run into a wall at {_player.Pos}", @"Error");
+                    GameWindow.ShowError($@"It seems you have run into a wall at {_player.Pos}");
                     ResetRun();
                     break;
                 }
@@ -259,7 +259,7 @@ public class RunWindow : Panel
     /// </summary>
     public void ResetRun()
     {
-        _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
+        _player = (Player?)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
         _tracerPoints.Clear();
         _forceStop = true;
         this.Invalidate();

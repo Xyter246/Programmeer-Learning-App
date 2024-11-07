@@ -1,5 +1,4 @@
-﻿using Programmeer_Learning_App.Entities;
-using Programmeer_Learning_App.User_Interface;
+﻿using Programmeer_Learning_App.User_Interface;
 
 namespace Programmeer_Learning_App.Exercises;
 
@@ -21,9 +20,9 @@ public class PathFindingExercise : Exercise
         Point? endPoint = null;
 
         // For every item in the string[]...
-        for (int x = 0; x < path[0].Length; x++)
-            for (int y = 0; y < path.Length; y++) {
-
+        for (int y = 0; y < path.Length; y++)
+            for (int x = 0; x < path[y].Length; x++) {
+                
                 // ...determine what Entity it must be.
                 switch (path[y][x]) {
                     case 's':

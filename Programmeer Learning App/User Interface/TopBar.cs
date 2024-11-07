@@ -19,7 +19,7 @@ public class TopBar : Label
         makeButton(@"LEARN", gameWindow.exerciseButton_Click);
         makeButton(@"METRICS", gameWindow.metricsButton_Click);
         return;
-        
+
         Button makeButton(string buttonName, EventHandler eh)
         {
             Button button = new Button();
@@ -33,10 +33,8 @@ public class TopBar : Label
             return button;
         }
 
-    /// <summary>
-    /// Function to calculate new ButtonOffset.
-    /// </summary>
-    /// <returns>A Point unoccupied by other Buttons.</returns>
-    private Point ButtonOffsetRight()
-        => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width) + _bufferSize.Width, (this.Height - _buttonSize.Height) / 2);
+        Point ButtonOffsetRight()
+            => new Point(_buttonCount++ * (_bufferSize.Width + _buttonSize.Width) + _bufferSize.Width,
+                    (this.Height - _buttonSize.Height) / 2);
+    }
 }
