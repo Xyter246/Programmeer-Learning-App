@@ -88,15 +88,14 @@ public class BlockWindow : Panel
                 return MoveCommand(commandLabels, cmdLabel, i, moveUp);
             } else if (commandLabels[i] is LoopCommandLabel loopCmd) {
                 // Recursive check within nested loops
-                if (FindCommand(loopCmd.CommandLabels, cmdLabel, moveUp)) {
-                    // Move cmdLabel outside of the nested loop to the appropriate position
-                    if (moveUp) {
-                        commandLabels.Insert(i, cmdLabel);
-                    } else {
-                        commandLabels.Insert(i + 1, cmdLabel);
-                    }
-                    return false;
+                if (!FindCommand(loopCmd.CommandLabels, cmdLabel, moveUp)) continue;
+                // Move cmdLabel outside of the nested loop to the appropriate position
+                if (moveUp) {
+                    commandLabels.Insert(i, cmdLabel);
+                } else {
+                    commandLabels.Insert(i + 1, cmdLabel);
                 }
+                return false;
             }
         }
         return false; // If not found within the nested loop, return false
@@ -178,8 +177,7 @@ public class BlockWindow : Panel
         // Create the panels for the up and down triangles
         Panel upArrow = CreateTriangleBox(true);
         Panel downArrow = CreateTriangleBox(false);
-
-
+        
         // Move the command up in the list
         upArrow.Click += (sender, e) => {
             if (sender is Panel panel)
@@ -218,12 +216,10 @@ public class BlockWindow : Panel
                 cmdLabel.BackColor = Color.FromArgb(0x60, 0xcc, 0x35);
 
             isHovering = false;
-            Task.Delay(1).ContinueWith(_ =>
-            {
-                if (!isHovering) {
-                    upArrow.Visible = false;
-                    downArrow.Visible = false;
-                }
+            Task.Delay(1).ContinueWith(_ => {
+                if (isHovering) return;
+                upArrow.Visible = false;
+                downArrow.Visible = false;
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 

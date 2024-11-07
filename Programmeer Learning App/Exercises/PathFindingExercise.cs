@@ -33,7 +33,7 @@ public class PathFindingExercise : Exercise
                         pfe.Grid[x, y] = new Blockade();
                         break;
                     case 'x':
-                        endPoint = new Point(x, y);
+                        endPoint = new Point(x, -y);
                         break;
                     // 'o' doesn't need a case as it's already the default.
                 }
