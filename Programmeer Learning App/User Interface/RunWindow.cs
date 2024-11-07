@@ -57,7 +57,7 @@ public class RunWindow : Panel
         Point[] playerPolygon = CalcPlayerPolygon(_player.FacingDir);
         Point playerOffset = new Point(_player.Pos.X * boxSize.Width, -_player.Pos.Y * boxSize.Height);
         
-        gr.DrawPolygon(Pens.Black, playerPolygon.Select(p => p with {X = p.X + playerOffset.X, Y = p.Y + playerOffset.Y}).ToArray());
+        gr.FillPolygon(new SolidBrush(Color.FromArgb(0x2b, 0x2d, 0x31)), playerPolygon.Select(p => p with {X = p.X + playerOffset.X, Y = p.Y + playerOffset.Y}).ToArray());
         return;
 
         Point[] CalcPlayerPolygon(CardinalDir cardDir)
