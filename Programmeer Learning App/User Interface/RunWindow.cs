@@ -115,7 +115,7 @@ public class RunWindow : Panel
 
     public void ResetRun()
     {
-        _player = (Player)_exercise?.Player.Clone() ?? (Player)Player.Empty.Clone();
+        _player = (Player)_exercise?.Player.Clone()! ?? (Player)Player.Empty.Clone();
         _forceStop = true;
         this.Invalidate();
     }
