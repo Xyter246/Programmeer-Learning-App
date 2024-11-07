@@ -30,6 +30,7 @@ public class BlockWindow : Panel
     public void AddCommand(CommandLabel cmdLabel)
     {
         this.Resize += cmdLabel.OnResize;
+        cmdLabel.OnResize(this, null);
         cmdLabel.MouseEnter += OnHover;
         _commandList.Add(cmdLabel);
         UpdateScreen();
@@ -92,7 +93,7 @@ public class BlockWindow : Panel
             } else if (commandLabels[index - 1] is LoopCommandLabel nestedLoop) {
                 // Move cmdLabel to the end of the nested loop's list
                 commandLabels.RemoveAt(index);
-                nestedLoop.CommandLabels.Insert(0, cmdLabel);
+                nestedLoop.CommandLabels.Add(cmdLabel);
                 return false;
             } else {
                 // Simple swap within the loop
@@ -108,7 +109,7 @@ public class BlockWindow : Panel
             } else if (commandLabels[index + 1] is LoopCommandLabel nestedLoop) {
                 // Move cmdLabel to the start of the nested loop's list
                 commandLabels.RemoveAt(index);
-                nestedLoop.CommandLabels.Add(cmdLabel);
+                nestedLoop.CommandLabels.Insert(0, cmdLabel);
                 return false;
             } else {
                 // Simple swap within the loop
