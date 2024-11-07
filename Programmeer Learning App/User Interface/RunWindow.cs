@@ -20,6 +20,8 @@ public class RunWindow : Panel
         _exercise = null;
         _player = Player.Empty;
 
+        _gridSize = _baseSize;
+
         ChangeSize();
 
         this.Paint += DrawWorld;
@@ -160,13 +162,24 @@ public class RunWindow : Panel
 
     private void ChangeSize()
     {
-        _gridSize = _exercise?.GridSize ?? _baseSize;
+        if (_gridSize.Width < _baseSize.Width) _gridSize.Width = _baseSize.Width;
+        if (_gridSize.Height < _baseSize.Height) _gridSize.Height = _baseSize.Height;
         _boxSize = new Size(this.Width / _gridSize.Width, this.Height / _gridSize.Height);
     }
 
     public async void Run(Program program)
     {
         ResetRun();
+
+        // Check if we are in sandbox mode, and update world size accordingly
+        if (_exercise == null) {
+            (Point, Size) sizeTuple = program.MaxGridSize(_player);
+            _gridSize = new Size(sizeTuple.Item2.Width + 1, sizeTuple.Item2.Height + 1);
+            _player.Pos = new Point(-sizeTuple.Item1.X, -sizeTuple.Item1.Y);
+            ChangeSize();
+            this.Invalidate();
+        }
+
         program.InitializeProgram();
         _forceStop = false;
         while (!program.HasEnded && ! _forceStop) {
