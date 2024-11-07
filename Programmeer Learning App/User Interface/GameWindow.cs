@@ -16,7 +16,7 @@ public class GameWindow : Form
     private readonly CommandWindow _cmdWindow;
     private readonly BlockWindow _blockWindow;
     private readonly TopBar _topBar;
-    private readonly RunWindow _runWindow;
+    private RunWindow _runWindow;
     private bool _running => !this._runWindow.RunHasFinished;
 
     public int UsableHeight;
@@ -98,6 +98,7 @@ public class GameWindow : Form
         while (!sr.EndOfStream)
             lines.Add(sr.ReadLine()!);
 
-        PathFindingExercise.Generate(lines.ToArray());
+        PathFindingExercise pfe =  PathFindingExercise.Generate(lines.ToArray());
+        _runWindow = new RunWindow(pfe);
     }
 }
