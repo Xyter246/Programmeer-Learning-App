@@ -1,6 +1,4 @@
-﻿using Programmeer_Learning_App.Entities;
-
-namespace Programmeer_Learning_App.Commands;
+﻿namespace Programmeer_Learning_App.Commands;
 
 public class RepeatCommand : LoopCommand
 {
@@ -33,8 +31,11 @@ public class RepeatCommand : LoopCommand
     public override Command? FromString(string[] words)
     {
         try {
-            int i = int.Parse(words[0]);
+            int i = int.Parse(words[1]);
             return new RepeatCommand(i);
         } catch { return null; }
     }
+
+    public override CommandLabel ToLabel()
+        => new RepeatCommandLabel(RepeatCount, Commands);
 }

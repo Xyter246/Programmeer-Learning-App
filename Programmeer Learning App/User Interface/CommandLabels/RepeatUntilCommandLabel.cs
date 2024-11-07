@@ -2,6 +2,8 @@
 
 public class RepeatUntilCommandLabel : LoopCommandLabel
 {
+    public new readonly string Name = "RepeatUntil";
+
     private readonly ComboBox _cbb = new ComboBox() {
         DataSource = new string[] {"Facing a Wall", "At the Edge of the Grid"}
     };
@@ -10,4 +12,7 @@ public class RepeatUntilCommandLabel : LoopCommandLabel
     {
         throw new NotImplementedException();
     }
+
+    public override string ToString()
+        => "RepeatUntil";
 }

@@ -9,9 +9,6 @@ namespace Programmeer_Learning_App.User_Interface;
 public class CommandWindow : Panel
 {
     private readonly Panel _buttonPanel;
-    private readonly Button _moveCmdButton;
-    private readonly Button _repeatCmdButton;
-    private readonly Button _turnCmdButton;
     private readonly BlockWindow _blockWindow;
 
     public CommandWindow(BlockWindow blockWindow)
@@ -32,16 +29,17 @@ public class CommandWindow : Panel
 
         // Initialize buttons and add them to _buttonPanel
         Point buttonLocation = new Point(10, 10);
-        _moveCmdButton = InitializeButton(new MoveCommandLabel());
-        _repeatCmdButton = InitializeButton(new RepeatCommandLabel());
-        // _turnCmdButton = InitializeButton(new TurnCommandLabel());
+        InitializeButton(new MoveCommandLabel());   // MoveButton
+        InitializeButton(new RepeatCommandLabel()); // RepeatButton
+        InitializeButton(new TurnCommandLabel());   // TurnButton
+        return;
 
         // Method to initialize and position buttons
         Button InitializeButton(CommandLabel cmd)
         {
             Button button = new Button();
             button.BackColor = Color.AliceBlue;
-            button.Text = cmd.Name;
+            button.Text = cmd.ToString();
             button.FlatStyle = FlatStyle.Flat;
             button.Location = buttonLocation;
             button.Click += ButtonClicked;
@@ -67,11 +65,14 @@ public class CommandWindow : Panel
         if (o is not Button button) return;
 
         switch(button.Tag!) {
-            case MoveCommandLabel moveCmdLabel:
+            case MoveCommandLabel:
                 _blockWindow.AddCommand(new MoveCommandLabel());
                 break;
-            case RepeatCommandLabel repeatCmdLabel:
+            case RepeatCommandLabel:
                 _blockWindow.AddCommand(new RepeatCommandLabel());
+                break;
+            case TurnCommandLabel:
+                _blockWindow.AddCommand(new TurnCommandLabel());
                 break;
             default: return;
         }

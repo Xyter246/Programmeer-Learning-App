@@ -6,5 +6,5 @@ public interface IFileReader
     /// Creates a Program instance by reading the selected file (via OpenFileDialog).
     /// </summary>
     /// <returns>A Program instance, or Null if there was a wrong filepath.</returns>
-    static abstract Program? Readfile();
+    static abstract List<CommandLabel>? Readfile();
 }

@@ -1,10 +1,4 @@
-﻿using Programmeer_Learning_App.Commands;
-using Programmeer_Learning_App.User_Interface.CommandLabels;
-using System.Drawing.Text;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
-
-namespace Programmeer_Learning_App.User_Interface;
+﻿namespace Programmeer_Learning_App.User_Interface;
 
 // This classes layout had been hand made, methods return types, parameters etc. 
 // After that the layout has been put through ChatGPT to use it to fill in the code inside of methods
@@ -12,7 +6,7 @@ namespace Programmeer_Learning_App.User_Interface;
 public class BlockWindow : Panel
 {
     private readonly Panel _blockPanel; // Inner panel for scrollable commands
-    private readonly List<CommandLabel> _commandList; // List to track command labels
+    private List<CommandLabel> _commandList; // List to track command labels
     private bool isHovering; // Tracks if the mouse is inside the label or triangles
 
     public BlockWindow()
@@ -35,16 +29,16 @@ public class BlockWindow : Panel
     // Method to add a new command label to the panel
     public void AddCommand(CommandLabel cmdLabel)
     {
+        this.Resize += cmdLabel.OnResize;
         _commandList.Add(cmdLabel);
-        UpdateScreen(_commandList);
+        UpdateScreen();
     }
 
     // Method to remove a command label by command reference
-    public void RemoveCommand(CommandLabel cmdLabel)
+    public void ClearCommands()
     {
-        if (_commandList.Remove(cmdLabel)) {
-            UpdateScreen(_commandList); // Refresh the display
-        }
+        _commandList.Clear();
+        UpdateScreen();
     }
 
     // Method to re-align labels after moving a command up or down
@@ -53,16 +47,17 @@ public class BlockWindow : Panel
 
         if (FindCommand(_commandList, cmdLabel, moveUp)) {
             // If cmdLabel is moved out of a loop list and needs to move outside the parent, position it in the main list
-            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel && ((LoopCommandLabel)cl).CommandLabels.Contains(cmdLabel));
-            if (moveUp && parentIndex != -1) {
+            int parentIndex = _commandList.FindIndex(cl => cl is LoopCommandLabel label && label.CommandLabels.Contains(cmdLabel));
+            if (parentIndex == -1) return;
+            if (moveUp) {
                 _commandList.Insert(parentIndex, cmdLabel); // Insert it above the parent loop
-            } else if (!moveUp && parentIndex != -1) {
+            } else {
                 _commandList.Insert(parentIndex + 1, cmdLabel); // Insert it below the parent loop
             }
         }
 
         // Refresh display after reordering
-        UpdateScreen(_commandList);
+        UpdateScreen();
     }
 
     private bool FindCommand(List<CommandLabel> commandLabels, CommandLabel cmdLabel, bool moveUp)
@@ -104,8 +99,7 @@ public class BlockWindow : Panel
                 commandLabels.Insert(index - 1, cmdLabel);
                 return false;
             }
-        } else // moving down
-          {
+        } else { // moving down
             if (index == commandLabels.Count - 1) // Move cmdLabel out of this loop and set it to be placed below parent
             {
                 commandLabels.RemoveAt(index);
@@ -124,27 +118,27 @@ public class BlockWindow : Panel
         }
     }
 
-    private void UpdateScreen(List<CommandLabel> commandList)
+    private void UpdateScreen()
     {
         _blockPanel.Controls.Clear();
-        Point labelLocation = new Point(10, 10);
+        Point startingLabelLocation = new Point(10, 10);
 
-        DrawCommandLabels(commandList, ref labelLocation);
+        DrawCommandLabels(_commandList, ref startingLabelLocation);
+        return;
 
         void DrawCommandLabels(List<CommandLabel> CommandLabels, ref Point labelLocation)
         {
             foreach (CommandLabel cmd in CommandLabels) {
-
                 cmd.Location = labelLocation;
+                cmd.OnResize(this, null);
                 cmd.MouseEnter += OnHover;
                 _blockPanel.Controls.Add(cmd);
                 labelLocation.Y += cmd.Height + 10;
 
-                if (cmd is LoopCommandLabel loopCmd) {
-                    labelLocation.X += 10;
-                    DrawCommandLabels(loopCmd.CommandLabels, ref labelLocation);
-                    labelLocation.X -= 10;
-                }
+                if (cmd is not LoopCommandLabel loopCmd) continue;
+                labelLocation.X += 10;
+                DrawCommandLabels(loopCmd.CommandLabels, ref labelLocation);
+                labelLocation.X -= 10;
             }
         }
     }
@@ -211,11 +205,6 @@ public class BlockWindow : Panel
         downArrow.MouseLeave += HideControls;
     }
 
-    private NumericUpDown CreateNumericBox()
-    {
-        throw new NotImplementedException();
-    }
-
     private Panel CreateTriangleBox(bool isUp)
     {
         Panel box = new Panel {
@@ -266,5 +255,12 @@ public class BlockWindow : Panel
         this.Location = new Point(cmdWindowWidth, gamewindow.UsableStartLocation);
     }
 
-    public Program Program() => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
+    public Program Program() 
+        => new Program(_commandList.Select(x => x.ConvertLabel()).ToList());
+
+    public void AddProgram(List<CommandLabel>? labels)
+    {
+        _commandList = labels ?? throw new ArgumentNullException();
+        UpdateScreen();
+    }
 }

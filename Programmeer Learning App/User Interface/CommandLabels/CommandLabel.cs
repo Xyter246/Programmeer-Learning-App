@@ -2,14 +2,21 @@
 
 public abstract class CommandLabel : Label
 {
-    public new string Name => ConvertLabel().Name;
+    protected const int _smallLabelOffset = 10;
 
-    public CommandLabel()
+    protected CommandLabel()
     {
-        this.Text = Name;
+        this.Text = this.ToString();
         this.Size = new Size(80, 30);
         this.BackColor = Color.White;
     }
 
     public abstract Command ConvertLabel();
+
+    public abstract override string ToString();
+
+    public virtual void OnResize(object? o, EventArgs? ea)
+    {
+        this.Size = this.Size with {Width = ((Control)o!).Width - this.Location.X - _smallLabelOffset};
+    }
 }

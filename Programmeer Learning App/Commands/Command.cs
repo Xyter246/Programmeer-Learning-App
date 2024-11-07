@@ -24,4 +24,10 @@ public abstract class Command
     /// <param name="words">the array of strings which are to be converted.</param>
     /// <returns>A Command instance of the current type, or Null if the string is invalid.</returns>
     public abstract Command? FromString(string[] words);
+
+    /// <summary>
+    /// Converts a Command to its Label variant.
+    /// </summary>
+    /// <returns>A CommandLabel of the same type as this Command.</returns>
+    public abstract CommandLabel ToLabel();
 }

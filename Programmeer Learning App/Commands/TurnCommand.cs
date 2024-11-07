@@ -1,22 +1,25 @@
-﻿using Programmeer_Learning_App.Entities;
-
-namespace Programmeer_Learning_App.Commands;
+﻿namespace Programmeer_Learning_App.Commands;
 
 public class TurnCommand : Command
 {
-    public RelativeDir RelativeDir;
+    public RelativeDir TurnDir;
+    private const int _overflowProtection = 4;
 
-    public TurnCommand(RelativeDir relativeDir)
+    public TurnCommand(RelativeDir turnDir)
     {
-        RelativeDir = relativeDir;
+        TurnDir = turnDir;
     }
 
     public override void Execute(Player player)
-        => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)RelativeDir) % Enum.GetNames(typeof(CardinalDir)).Length);
+        => player.FacingDir = (CardinalDir) (((int)player.FacingDir + (int)TurnDir + _overflowProtection) % Enum.GetNames(typeof(CardinalDir)).Length);
 
     public override string ToString()
-        => $"Turn {RelativeDir}";
+        => $"Turn {TurnDir}";
 
     public override Command? FromString(string[] words)
         => Enum.TryParse(words[1], out RelativeDir relDir) ? new TurnCommand(relDir) : null;
+
+    public override CommandLabel ToLabel()
+    // Constructor of TurnCommandLabel doesn't convert input properly
+        => new TurnCommandLabel(TurnDir);
 }

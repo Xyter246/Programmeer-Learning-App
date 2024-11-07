@@ -1,4 +1,6 @@
-﻿namespace Programmeer_Learning_App.User_Interface;
+﻿using Programmeer_Learning_App.Exercises;
+
+namespace Programmeer_Learning_App.User_Interface;
 
 public class TopBar : Label
 {
@@ -13,8 +15,10 @@ public class TopBar : Label
         this.Dock = DockStyle.Top;
 
         makeButton(@"RUN", gameWindow.runButton_Click);
+        makeButton(@"RESET", gameWindow.resetButton_Click);
         makeButton(@"EXPORT", gameWindow.exportButton_Click);
         makeButton(@"IMPORT", gameWindow.importButton_Click);
+        makeButton(@"LEARN", gameWindow.exerciseButton_Click);
         return;
 
         Button makeButton(string buttonName, EventHandler eh)
