@@ -2,8 +2,8 @@
 
 public enum CardinalDir
 {
-    South,
-    West,
-    North,
-    East
+    South,  // 0
+    West,   // 1
+    North,  // 2
+    East    // 3
 }

@@ -6,7 +6,7 @@ public static class CommandFactory
         {"Move"       , (words) => new MoveCommand(0).FromString(words)},
         {"Turn"       , (words) => new TurnCommand(RelativeDir.Right).FromString(words)},
         {"Repeat"     , (words) => new RepeatCommand(0).FromString(words)},
-        {"RepeatUntil", (words) => new RepeatUntilCommand((Player p) => false).FromString(words)}
+        {"RepeatUntil", (words) => new RepeatUntilCommand(_ => false).FromString(words)}
     };
 
     /// <summary>
