@@ -1,4 +1,5 @@
 # Programmeer Learning App
+Most buttons are quite self-explanatory. Regardless, we will still describe a couple program interactions here for the ones that aren't as self-explanatory.
 
 ## Learning using Exercises
 In order to practice Exercises, you need to click on the LEARN button at the top. Once you've done so, a windows file explorer menu will open. It accepts text documents as input and we have prepared a couple for you just in case.
