@@ -4,6 +4,8 @@ using Programmeer_Learning_App.Importing;
 
 namespace Programmeer_Learning_App.User_Interface;
 
+// We use the Winforms Library to create our UI, this includes: Form, Label, Panel, Button, ComboBox, OpenFileDialog, SaveFileDialog and MessageBox.
+
 public class GameWindow : Form
 {
     [STAThread] // Required for Importing and Exporting functionality.
